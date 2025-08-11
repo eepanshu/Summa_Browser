@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SummaBrowser Deployment Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .success { border-left: 5px solid #27ae60; }
+        .info { border-left: 5px solid #3498db; }
+        .warning { border-left: 5px solid #f39c12; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; }
+        .url { background: #ecf0f1; padding: 10px; border-radius: 5px; font-family: monospace; }
+        .check-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .check-btn:hover { background: #2980b9; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🚀 SummaBrowser Render Deployment Monitor</h1>
+    
+    <div class="status-card info">
+        <h2>📦 Deployment Status</h2>
+        <p><strong>Repository:</strong> eepanshu/Summa_Browser</p>
+        <p><strong>Branch:</strong> main</p>
+        <p><strong>Service:</strong> summabrowser-api</p>
+        <p><strong>Action:</strong> Updated to include web interface</p>
+        <p><strong>Expected Time:</strong> 3-5 minutes</p>
+    </div>
+    
+    <div class="status-card success">
+        <h2>✅ Changes Deployed</h2>
+        <ul>
+            <li>✅ Updated render.yaml to use app-web.py</li>
+            <li>✅ Added complete web interface with HTML UI</li>
+            <li>✅ Preserved all existing API functionality</li>
+            <li>✅ Added drag-and-drop file processing</li>
+            <li>✅ Added real-time status monitoring</li>
+        </ul>
+    </div>
+    
+    <div class="status-card warning">
+        <h2>🔍 Check Deployment</h2>
+        <p>Click the buttons below to test your deployed application:</p>
+        
+        <button class="check-btn" onclick="checkWebInterface()">🌐 Check Web Interface</button>
+        <button class="check-btn" onclick="checkHealthAPI()">⚕️ Check Health API</button>
+        <button class="check-btn" onclick="openDeployedApp()">🚀 Open Deployed App</button>
+        
+        <div class="url">
+            <strong>Your Live URL:</strong> https://summabrowser-api.onrender.com
+        </div>
+        
+        <div id="results"></div>
+    </div>
+    
+    <div class="status-card info">
+        <h2>🎯 What to Expect</h2>
+        <p><strong>Before (Old):</strong> Visiting the URL showed JSON status message</p>
+        <p><strong>After (New):</strong> Visiting the URL shows beautiful web interface with:</p>
+        <ul>
+            <li>🎨 Modern UI with gradients and animations</li>
+            <li>📁 Drag-and-drop file upload</li>
+            <li>🤖 AI-powered document summarization</li>
+            <li>📊 Real-time processing status</li>
+            <li>📥 Download and copy functionality</li>
+            <li>📱 Mobile-responsive design</li>
+        </ul>
+    </div>
+    
+    <script>
+        function showResult(message, type) {
+            const results = document.getElementById('results');
+            results.innerHTML = `<div class="status-card ${type}"><p>${message}</p></div>`;
+        }
+        
+        async function checkWebInterface() {
+            showResult('🔍 Checking web interface...', 'info');
+            try {
+                const response = await fetch('https://summabrowser-api.onrender.com', {
+                    method: 'GET',
+                    headers: { 'Accept': 'text/html' }
+                });
+                
+                if (response.ok) {
+                    const text = await response.text();
+                    if (text.includes('SummaBrowser AI')) {
+                        showResult('✅ SUCCESS! Web interface is live and showing HTML UI!', 'success');
+                    } else {
+                        showResult('⚠️ Response received but might still be showing JSON. Deployment may be in progress.', 'warning');
+                    }
+                } else {
+                    showResult(`❌ HTTP ${response.status}: ${response.statusText}`, 'warning');
+                }
+            } catch (error) {
+                showResult(`❌ Connection error: ${error.message}`, 'warning');
+            }
+        }
+        
+        async function checkHealthAPI() {
+            showResult('🔍 Checking health API...', 'info');
+            try {
+                const response = await fetch('https://summabrowser-api.onrender.com/health');
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult(`✅ Health API working! Status: ${data.status}`, 'success');
+                } else {
+                    showResult(`❌ Health API error: ${response.status}`, 'warning');
+                }
+            } catch (error) {
+                showResult(`❌ Health API error: ${error.message}`, 'warning');
+            }
+        }
+        
+        function openDeployedApp() {
+            window.open('https://summabrowser-api.onrender.com', '_blank');
+            showResult('🚀 Opened deployed app in new tab. Check if you see the web interface!', 'info');
+        }
+        
+        // Auto-check every 30 seconds
+        setInterval(() => {
+            checkWebInterface();
+        }, 30000);
+        
+        // Initial check after 10 seconds
+        setTimeout(() => {
+            checkWebInterface();
+        }, 10000);
+    </script>
+</body>
+</html>

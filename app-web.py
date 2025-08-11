@@ -8,6 +8,8 @@ import base64
 import re
 import requests
 from io import BytesIO
+import json
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 CORS(app)
@@ -421,6 +423,35 @@ def index():
             color: #3498db;
         }
         
+        .video-input-section {
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.2);
+        }
+        
+        .video-input-area {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        #videoUrlInput {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+        }
+        
+        #videoUrlInput:focus {
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.2) !important;
+        }
+        
+        #videoUrlInput:valid {
+            border-color: #27ae60 !important;
+            background: linear-gradient(90deg, transparent 0%, rgba(39, 174, 96, 0.05) 100%);
+        }
+        
         .footer {
             text-align: center;
             margin-top: 30px;
@@ -436,7 +467,7 @@ def index():
         <div class="header">
             <div class="logo">🤖📄</div>
             <h1>SummaBrowser AI</h1>
-            <p class="subtitle">Intelligent Document Summarizer</p>
+            <p class="subtitle">Intelligent Document & Video Summarizer</p>
         </div>
         
         <div class="upload-area" id="uploadArea">
@@ -448,6 +479,26 @@ def index():
         </div>
         
         <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.webp,.txt">
+        
+        <div style="margin: 30px 0; text-align: center;">
+            <div style="display: inline-block; background: #f8f9fa; padding: 2px; border-radius: 25px; margin-bottom: 20px;">
+                <span style="color: #7f8c8d; font-size: 14px;">━━━━━━━━━━ OR ━━━━━━━━━━</span>
+            </div>
+        </div>
+        
+        <div class="video-input-section">
+            <h3 style="color: #2c3e50; margin-bottom: 15px; text-align: center;">
+                <i class="fab fa-youtube" style="color: #e74c3c;"></i> Video URL Summarization
+            </h3>
+            <div class="video-input-area">
+                <input type="url" id="videoUrlInput" placeholder="Paste YouTube video URL here (e.g., https://youtube.com/watch?v=...)" 
+                       style="width: 100%; padding: 15px; border: 2px dashed #bdc3c7; border-radius: 10px; font-size: 14px; outline: none; transition: all 0.3s ease;">
+                <div id="videoInfo" style="margin: 10px 0; display: none;">
+                    <div id="videoTitle" style="font-weight: bold; color: #27ae60;"></div>
+                    <div id="videoMeta" style="color: #7f8c8d; font-size: 14px;"></div>
+                </div>
+            </div>
+        </div>
         
         <div class="file-info" id="fileInfo">
             <div class="file-name" id="fileName"></div>
@@ -484,16 +535,22 @@ def index():
         
         <div class="footer">
             <p>🚀 Powered by SummaBrowser AI Engine v2.1.0</p>
-            <p>OCR • PDF Processing • AI Summarization</p>
+            <p>OCR • PDF Processing • Video Transcription • AI Summarization</p>
         </div>
     </div>
     
     <script>
         let selectedFile = null;
+        let selectedVideoUrl = null;
         let fullSummary = null;
+        let currentInputType = null; // 'file' or 'video'
         
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
+        const videoUrlInput = document.getElementById('videoUrlInput');
+        const videoInfo = document.getElementById('videoInfo');
+        const videoTitle = document.getElementById('videoTitle');
+        const videoMeta = document.getElementById('videoMeta');
         const fileInfo = document.getElementById('fileInfo');
         const fileName = document.getElementById('fileName');
         const fileSize = document.getElementById('fileSize');
@@ -512,7 +569,9 @@ def index():
         uploadArea.addEventListener('drop', handleDrop);
         
         fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
-        processBtn.addEventListener('click', processFile);
+        videoUrlInput.addEventListener('input', handleVideoUrlInput);
+        videoUrlInput.addEventListener('paste', (e) => setTimeout(() => handleVideoUrlInput(e), 100));
+        processBtn.addEventListener('click', processInput);
         copyBtn.addEventListener('click', copyToClipboard);
         
         function handleDragOver(e) {
@@ -557,6 +616,92 @@ def index():
             processBtn.disabled = false;
             result.style.display = 'none';
             showStatus('File ready for processing', 'success');
+        }
+        
+        function handleVideoUrlInput(e) {
+            const url = videoUrlInput.value.trim();
+            
+            // Clear previous selections
+            selectedFile = null;
+            fileInfo.style.display = 'none';
+            
+            if (!url) {
+                selectedVideoUrl = null;
+                currentInputType = null;
+                videoInfo.style.display = 'none';
+                processBtn.disabled = true;
+                return;
+            }
+            
+            // Validate YouTube URL
+            const isYouTube = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/.test(url);
+            
+            if (isYouTube) {
+                selectedVideoUrl = url;
+                currentInputType = 'video';
+                
+                // Extract video ID for display
+                const videoId = extractVideoId(url);
+                videoTitle.textContent = `YouTube Video: ${videoId}`;
+                videoMeta.textContent = 'Ready to extract transcript and generate summary';
+                videoInfo.style.display = 'block';
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="fab fa-youtube"></i> Generate Video Summary';
+                showStatus('YouTube URL detected - ready for processing', 'success');
+            } else {
+                selectedVideoUrl = null;
+                currentInputType = null;
+                videoInfo.style.display = 'none';
+                processBtn.disabled = true;
+                showStatus('Please enter a valid YouTube URL', 'error');
+            }
+        }
+        
+        function extractVideoId(url) {
+            const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
+            return match ? match[1] : 'Unknown';
+        }
+        
+        async function processInput() {
+            if (currentInputType === 'video') {
+                await processVideo();
+            } else if (selectedFile) {
+                await processFile();
+            }
+        }
+        
+        async function processVideo() {
+            if (!selectedVideoUrl) return;
+            
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Video...';
+            progress.style.display = 'block';
+            showStatus('🎥 Extracting transcript from video...', 'info');
+            
+            try {
+                const formData = new FormData();
+                formData.append('video_url', selectedVideoUrl);
+                
+                const response = await fetch('/process-video', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('✅ Video processed successfully!', 'success');
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Video processing failed');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="fas fa-magic"></i> Generate AI Summary';
+                progress.style.display = 'none';
+            }
         }
         
         async function processFile() {
@@ -795,6 +940,101 @@ def file_too_large(e):
         'max_size': '16MB',
         'suggestion': 'Please compress your file or use a smaller image'
     }), 413
+
+@app.route('/process-video', methods=['POST'])
+def process_video():
+    try:
+        # Get video URL from form data
+        video_url = request.form.get('video_url')
+        
+        if not video_url:
+            return jsonify({
+                'success': False,
+                'error': 'No video URL provided'
+            })
+        
+        # Validate YouTube URL
+        youtube_pattern = r'^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+'
+        if not re.match(youtube_pattern, video_url):
+            return jsonify({
+                'success': False,
+                'error': 'Please provide a valid YouTube URL'
+            })
+        
+        logger.info(f'Processing video URL: {video_url}')
+        
+        try:
+            # Try to import video processing
+            from video_integration import process_video_request
+            
+            # Process the video
+            result = process_video_request(video_url, 'url')
+            
+            if result.get('success'):
+                # Generate summary file
+                video_id = re.search(r'(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)', video_url)
+                video_id = video_id.group(1) if video_id else 'unknown'
+                
+                summary_filename = f"video_summary_{video_id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+                summary_path = os.path.join(OUTPUT_FOLDER, summary_filename)
+                
+                # Create summary content
+                metadata = result.get('metadata', {})
+                transcript = result.get('transcript', '')
+                summary = result.get('summary', '')
+                
+                summary_content = f"""SummaBrowser AI - Video Summary Report
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+Video URL: {video_url}
+Video Title: {metadata.get('title', 'N/A')}
+Author: {metadata.get('author', 'N/A')}
+Duration: {metadata.get('length', 'N/A')} seconds
+Views: {metadata.get('views', 'N/A')}
+Processing Method: {result.get('type', 'YouTube Transcript')}
+
+SUMMARY:
+{summary}
+
+FULL TRANSCRIPT:
+{transcript}
+
+---
+Processed by SummaBrowser AI Engine v2.1.0
+Video processing capability powered by AI transcription
+"""
+                
+                # Save summary to file
+                with open(summary_path, 'w', encoding='utf-8') as f:
+                    f.write(summary_content)
+                
+                return jsonify({
+                    'success': True,
+                    'summary': summary,
+                    'transcript': transcript[:1000] + '...' if len(transcript) > 1000 else transcript,
+                    'metadata': metadata,
+                    'download_url': f'/download/{summary_filename}',
+                    'processing_method': result.get('type', 'YouTube Transcript')
+                })
+            
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': result.get('error', 'Video processing failed')
+                })
+                
+        except ImportError:
+            # Fallback if video processing not available
+            return jsonify({
+                'success': False,
+                'error': 'Video processing feature is not available. Please install required dependencies: youtube-transcript-api, pytube'
+            })
+            
+    except Exception as e:
+        logger.error(f'Video processing error: {str(e)}')
+        return jsonify({
+            'success': False,
+            'error': f'Video processing failed: {str(e)}'
+        })
 
 @app.errorhandler(500)
 def internal_error(e):

@@ -1,0 +1,20 @@
+# Core Flask dependencies
+Flask==2.3.3
+Flask-CORS==4.0.0
+Werkzeug==2.3.7
+
+# Document processing
+PyPDF2==3.0.1
+Pillow==10.0.1
+requests==2.31.0
+
+# Video processing (YouTube support)
+youtube-transcript-api==0.6.1
+pytube==15.0.0
+
+# Optional: Advanced video processing
+# moviepy==1.0.3  # Uncomment for video file upload support
+# openai==0.28.0  # Uncomment for OpenAI Whisper API support
+
+# Development
+gunicorn==21.2.0
