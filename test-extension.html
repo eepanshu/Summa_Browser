@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test SummaBrowse Extension</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles-pro.css">
+    <style>
+        /* Simple test styles */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .test-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px 12px 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h2>🧪 Extension Test</h2>
+            <p>Testing SummaBrowse Pro functionality</p>
+        </div>
+        
+        <div class="extension-container">
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="tab-btn active" data-tab="quick">
+                    <i class="fas fa-bolt"></i>
+                    <span>Quick</span>
+                </button>
+                <button class="tab-btn" data-tab="video">
+                    <i class="fab fa-youtube"></i>
+                    <span>Video</span>
+                </button>
+                <button class="tab-btn" data-tab="about">
+                    <i class="fas fa-info-circle"></i>
+                    <span>About</span>
+                </button>
+            </div>
+
+            <!-- Quick Tab -->
+            <div class="tab-content active" id="quickTab">
+                <div class="content-section">
+                    <h3><i class="fas fa-magic"></i> Quick Test</h3>
+                    <p>This is the quick tab content.</p>
+                    <button class="action-btn primary">Test Button</button>
+                </div>
+            </div>
+
+            <!-- Video Tab -->
+            <div class="tab-content" id="videoTab">
+                <div class="content-section">
+                    <h3><i class="fab fa-youtube"></i> Video Test</h3>
+                    <p>This is the video tab content!</p>
+                    
+                    <div class="video-input-section">
+                        <label for="videoUrlInput" class="input-label">
+                            <i class="fab fa-youtube"></i> YouTube URL
+                        </label>
+                        <input type="url" class="video-url-input" id="videoUrlInput" 
+                               placeholder="https://www.youtube.com/watch?v=...">
+                        
+                        <button class="action-btn primary full-width" id="processVideo">
+                            <i class="fas fa-play"></i>
+                            <span>Process Video</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div class="tab-content" id="aboutTab">
+                <div class="content-section">
+                    <h3><i class="fas fa-info-circle"></i> About Test</h3>
+                    <p>This is the about tab content.</p>
+                    <button class="contact-btn" id="contactDeveloper">
+                        <i class="fab fa-linkedin"></i>
+                        <span>Contact Developer</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple test JavaScript
+        class TestExtension {
+            constructor() {
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Tab navigation
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const tabName = e.target.closest('.tab-btn').dataset.tab;
+                        this.switchTab(tabName);
+                    });
+                });
+
+                // Contact button
+                document.getElementById('contactDeveloper')?.addEventListener('click', () => {
+                    this.showDeveloperInfo();
+                });
+
+                // Process video button
+                document.getElementById('processVideo')?.addEventListener('click', () => {
+                    alert('Video processing would happen here!');
+                });
+            }
+
+            switchTab(tabName) {
+                console.log('Switching to tab:', tabName);
+                
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(`${tabName}Tab`).classList.add('active');
+            }
+
+            showDeveloperInfo() {
+                const alertMessage = `🚀 SummaBrowse Pro v3.0\n\n` +
+                                     `Developed by: SummaBrowse Team\n` +
+                                     `Professional AI-powered content analysis platform\n\n` +
+                                     `📧 Contact Information:\n` +
+                                     `LinkedIn: Deepanshu Bhadauria\n\n` +
+                                     `Click OK to visit LinkedIn profile`;
+
+                if (confirm(alertMessage)) {
+                    window.open('https://www.linkedin.com/in/deepanshu-bhadauria-5b985b242/', '_blank');
+                }
+            }
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new TestExtension();
+        });
+    </script>
+</body>
+</html>

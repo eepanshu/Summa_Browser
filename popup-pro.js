@@ -46,6 +46,10 @@ class SummaBrowsePro {
             this.openWebApp();
         });
 
+        document.getElementById('processVideo')?.addEventListener('click', () => {
+            this.processVideo();
+        });
+
         // Settings Actions
         document.getElementById('themeSelector')?.addEventListener('change', (e) => {
             this.changeTheme(e.target.value);
@@ -57,6 +61,11 @@ class SummaBrowsePro {
 
         document.getElementById('resetSettings')?.addEventListener('click', () => {
             this.resetSettings();
+        });
+
+        // About Actions
+        document.getElementById('contactDeveloper')?.addEventListener('click', () => {
+            this.showDeveloperInfo();
         });
 
         // Modal Actions
@@ -330,6 +339,50 @@ class SummaBrowsePro {
         window.close();
     }
 
+    async processVideo() {
+        const videoUrlInput = document.getElementById('videoUrlInput');
+        const videoUrl = videoUrlInput.value.trim();
+
+        if (!videoUrl) {
+            this.showToast('Please enter a YouTube URL', 'error');
+            return;
+        }
+
+        // Validate YouTube URL
+        const youtubePattern = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/;
+        if (!youtubePattern.test(videoUrl)) {
+            this.showToast('Please enter a valid YouTube URL', 'error');
+            return;
+        }
+
+        try {
+            this.showProcessing('Processing Video', 'Extracting transcript and generating AI summary...');
+
+            const formData = new FormData();
+            formData.append('video_url', videoUrl);
+
+            const response = await fetch(`${this.apiUrl}/process-video`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.hideProcessing();
+                this.showResult('Video Summary Generated', data.summary);
+                this.showToast('Video processed successfully!', 'success');
+                videoUrlInput.value = ''; // Clear input
+            } else {
+                throw new Error(data.error || 'Video processing failed');
+            }
+        } catch (error) {
+            this.hideProcessing();
+            this.showToast(`Video processing failed: ${error.message}`, 'error');
+            console.error('Video processing error:', error);
+        }
+    }
+
     showProcessing(title, description) {
         const overlay = document.getElementById('processingOverlay');
         const titleElement = document.getElementById('processingTitle');
@@ -426,6 +479,29 @@ class SummaBrowsePro {
                 this.loadSettings();
                 this.showNotification('Settings reset successfully', 'success');
             });
+        }
+    }
+
+    showDeveloperInfo() {
+        // Create a popup alert with developer information
+        const alertMessage = `🚀 SummaBrowse Pro v3.0\n\n` +
+                             `Developed by: SummaBrowse Team\n` +
+                             `Professional AI-powered content analysis platform\n\n` +
+                             `✨ Features:\n` +
+                             `• AI Document Summarization\n` +
+                             `• YouTube Video Processing\n` +
+                             `• OCR & PDF Analysis\n` +
+                             `• Real-time Page Analysis\n\n` +
+                             `📧 Contact Information:\n` +
+                             `LinkedIn: Deepanshu Bhadauria\n\n` +
+                             `Click OK to visit LinkedIn profile`;
+
+        if (confirm(alertMessage)) {
+            // Open LinkedIn profile in new tab
+            chrome.tabs.create({ 
+                url: 'https://www.linkedin.com/in/deepanshu-bhadauria-5b985b242/'
+            });
+            window.close();
         }
     }
 
@@ -597,3 +673,8 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Initialize the extension when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new SummaBrowsePro();
+});

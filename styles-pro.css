@@ -380,6 +380,256 @@ body {
     color: #667eea;
 }
 
+/* Video Input Section */
+.video-input-section {
+    margin-top: 16px;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.video-url-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #1f2937;
+    font-size: 13px;
+    margin-bottom: 12px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.video-url-input:focus {
+    outline: none;
+    border-color: #667eea;
+    background: white;
+}
+
+.video-url-input::placeholder {
+    color: #9ca3af;
+}
+
+.feature-highlight {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+}
+
+.feature-highlight h4 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #0369a1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #1e40af;
+}
+
+.feature-list li i {
+    font-size: 10px;
+    color: #059669;
+}
+
+/* About Tab Styles */
+.about-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.app-branding {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    color: white;
+    text-align: left;
+}
+
+.app-logo {
+    font-size: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.app-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.version-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.app-tagline {
+    margin: 8px 0 0 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.developer-info {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+}
+
+.developer-info h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dev-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dev-details h5 {
+    margin: 0 0 4px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.dev-details p {
+    margin: 0;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.contact-btn {
+    background: #0077b5;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+}
+
+.contact-btn:hover {
+    background: #005885;
+}
+
+.features-overview h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.features-overview .feature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.features-overview .feature-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #4b5563;
+}
+
+.features-overview .feature-item i {
+    font-size: 14px;
+    color: #667eea;
+}
+
+.feature-highlight {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 16px;
+    color: white;
+}
+
+.feature-highlight h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.feature-list i {
+    color: #4ade80;
+    font-size: 10px;
+}
+
 /* Settings */
 .settings-group {
     margin-bottom: 20px;

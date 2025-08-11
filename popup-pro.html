@@ -6,7 +6,7 @@
     <title>SummaBrowse Pro Extension</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles-pro.css">
 </head>
 <body>
     <div class="extension-container">
@@ -36,6 +36,10 @@
                 <i class="fas fa-globe"></i>
                 <span>Page</span>
             </button>
+            <button class="tab-btn" data-tab="video">
+                <i class="fab fa-youtube"></i>
+                <span>Video</span>
+            </button>
             <button class="tab-btn" data-tab="upload">
                 <i class="fas fa-upload"></i>
                 <span>Upload</span>
@@ -43,6 +47,10 @@
             <button class="tab-btn" data-tab="settings">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
+            </button>
+            <button class="tab-btn" data-tab="about">
+                <i class="fas fa-info-circle"></i>
+                <span>About</span>
             </button>
         </div>
 
@@ -136,6 +144,37 @@
             </div>
         </div>
 
+        <!-- Video Tab -->
+        <div class="tab-content" id="videoTab">
+            <div class="content-section">
+                <h3><i class="fab fa-youtube"></i> YouTube Video Processor</h3>
+                <p class="description">Extract transcripts and generate AI summaries from YouTube videos.</p>
+                
+                <div class="video-input-section">
+                    <label for="videoUrlInput" class="input-label">
+                        <i class="fab fa-youtube"></i> YouTube URL
+                    </label>
+                    <input type="url" class="video-url-input" id="videoUrlInput" 
+                           placeholder="https://www.youtube.com/watch?v=...">
+                    
+                    <button class="action-btn primary full-width" id="processVideo">
+                        <i class="fas fa-play"></i>
+                        <span>Process Video</span>
+                    </button>
+                </div>
+
+                <div class="feature-highlight">
+                    <h4><i class="fas fa-sparkles"></i> Video AI Features</h4>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Automatic transcript extraction</li>
+                        <li><i class="fas fa-check"></i> AI-powered summarization</li>
+                        <li><i class="fas fa-check"></i> Key points identification</li>
+                        <li><i class="fas fa-check"></i> Downloadable results</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <!-- Upload Tab -->
         <div class="tab-content" id="uploadTab">
             <div class="content-section">
@@ -162,12 +201,12 @@
                             <span>Images & OCR</span>
                         </div>
                         <div class="capability-item">
-                            <i class="fab fa-youtube"></i>
-                            <span>YouTube Videos</span>
-                        </div>
-                        <div class="capability-item">
                             <i class="fas fa-file-alt"></i>
                             <span>Text Files</span>
+                        </div>
+                        <div class="capability-item">
+                            <i class="fas fa-globe"></i>
+                            <span>Web Pages</span>
                         </div>
                     </div>
                 </div>
@@ -248,6 +287,65 @@
             </div>
         </div>
 
+        <!-- About Tab -->
+        <div class="tab-content" id="aboutTab">
+            <div class="content-section">
+                <h3><i class="fas fa-info-circle"></i> About SummaBrowse</h3>
+                <p class="description">Professional AI-powered document and content analysis platform.</p>
+                
+                <div class="about-info">
+                    <div class="app-branding">
+                        <div class="app-logo">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="app-details">
+                            <h4>SummaBrowse Pro</h4>
+                            <span class="version-badge">v3.0</span>
+                            <p class="app-tagline">AI-Powered Content Analysis</p>
+                        </div>
+                    </div>
+
+                    <div class="developer-info">
+                        <h4><i class="fas fa-code"></i> Developer Information</h4>
+                        <div class="dev-card">
+                            <div class="dev-details">
+                                <h5>Developed by SummaBrowse Team</h5>
+                                <p>Professional AI solutions for content analysis</p>
+                            </div>
+                            <div class="contact-info">
+                                <button class="contact-btn" id="contactDeveloper">
+                                    <i class="fab fa-linkedin"></i>
+                                    <span>Connect on LinkedIn</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="features-overview">
+                        <h4><i class="fas fa-sparkles"></i> Key Features</h4>
+                        <div class="feature-grid">
+                            <div class="feature-item">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>PDF Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-image"></i>
+                                <span>OCR Processing</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fab fa-youtube"></i>
+                                <span>Video Summaries</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-brain"></i>
+                                <span>AI Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Processing Overlay -->
         <div class="processing-overlay" id="processingOverlay">
             <div class="processing-content">
@@ -299,6 +397,6 @@
         </div>
     </div>
 
-    <script src="popup.js"></script>
+    <script src="popup-pro.js"></script>
 </body>
 </html>
