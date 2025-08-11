@@ -1,10 +1,10 @@
-# Render.yaml - Render deployment configuration
+# Render.yaml - Render deployment configuration with Web Interface
 services:
   - type: web
     name: summabrowser-api
     env: python
     buildCommand: "pip install -r summary/requirements-ocr.txt"
-    startCommand: "cd summary && python app-ocr.py"
+    startCommand: "cd summary && python app-web.py"
     plan: free
     envVars:
       - key: FLASK_ENV

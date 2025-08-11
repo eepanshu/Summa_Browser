@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SummaBrowser - Test Your Live API</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+        
+        .api-status {
+            background: #d5f4e6;
+            border: 1px solid #27ae60;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .api-url {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        
+        .upload-area {
+            border: 3px dashed #3498db;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 30px 0;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .upload-area:hover {
+            border-color: #2980b9;
+            background: #e3f2fd;
+        }
+        
+        .upload-area.dragover {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            color: #3498db;
+            margin-bottom: 15px;
+        }
+        
+        .upload-text {
+            font-size: 18px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .upload-hint {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .file-name {
+            font-weight: bold;
+            color: #27ae60;
+        }
+        
+        .process-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .process-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .process-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .progress {
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            animation: progress 2s ease-in-out infinite;
+        }
+        
+        @keyframes progress {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .result {
+            margin: 30px 0;
+            display: none;
+        }
+        
+        .summary-box {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .summary-text {
+            line-height: 1.6;
+            color: #2c3e50;
+            white-space: pre-wrap;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            flex: 1;
+            justify-content: center;
+            min-width: 120px;
+        }
+        
+        .btn-download {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-copy {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .status {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .status.success {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status.error {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .status.info {
+            background: #d6eaf8;
+            color: #3498db;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ecf0f1;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .stats {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🤖📄</div>
+            <h1>SummaBrowser API Tester</h1>
+            <p class="subtitle">Test Your Live Deployed API</p>
+        </div>
+        
+        <div class="api-status">
+            <strong>🚀 Your Live API:</strong>
+            <div class="api-url">https://summabrowser-api.onrender.com</div>
+            <div id="connectionStatus">🔍 Checking connection...</div>
+        </div>
+        
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="upload-text">Drag & drop your PDF here</div>
+            <div class="upload-hint">or click to browse (PDF, Images, Text files up to 16MB)</div>
+        </div>
+        
+        <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.webp,.txt">
+        
+        <div class="file-info" id="fileInfo">
+            <div class="file-name" id="fileName"></div>
+            <div id="fileSize"></div>
+        </div>
+        
+        <button class="process-btn" id="processBtn" disabled>
+            <i class="fas fa-magic"></i> Generate AI Summary with Your API
+        </button>
+        
+        <div class="progress" id="progress">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="status" id="status"></div>
+        
+        <div class="result" id="result">
+            <h3><i class="fas fa-file-alt"></i> AI-Generated Summary</h3>
+            <div class="summary-box">
+                <div class="summary-text" id="summaryText"></div>
+            </div>
+            
+            <div class="stats" id="stats">
+                <h4>📊 Processing Stats:</h4>
+                <div class="stats-item">
+                    <span>File:</span>
+                    <span id="statFileName">-</span>
+                </div>
+                <div class="stats-item">
+                    <span>Original Length:</span>
+                    <span id="statOriginalLength">-</span>
+                </div>
+                <div class="stats-item">
+                    <span>Summary Length:</span>
+                    <span id="statSummaryLength">-</span>
+                </div>
+                <div class="stats-item">
+                    <span>Compression:</span>
+                    <span id="statCompression">-</span>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a href="#" class="btn btn-download" id="downloadBtn">
+                    <i class="fas fa-download"></i> Download Full Summary
+                </a>
+                <button class="btn btn-copy" id="copyBtn">
+                    <i class="fas fa-copy"></i> Copy to Clipboard
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🚀 Testing your deployed SummaBrowser API</p>
+            <p>OCR • PDF Processing • AI Summarization • Live in Production</p>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE_URL = 'https://summabrowser-api.onrender.com';
+        let selectedFile = null;
+        let fullSummary = null;
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const processBtn = document.getElementById('processBtn');
+        const progress = document.getElementById('progress');
+        const status = document.getElementById('status');
+        const result = document.getElementById('result');
+        const summaryText = document.getElementById('summaryText');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const connectionStatus = document.getElementById('connectionStatus');
+        
+        // Upload area events
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        uploadArea.addEventListener('drop', handleDrop);
+        
+        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+        processBtn.addEventListener('click', processFile);
+        copyBtn.addEventListener('click', copyToClipboard);
+        
+        // Check API connection on load
+        checkAPIConnection();
+        
+        async function checkAPIConnection() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/health`, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    connectionStatus.innerHTML = '✅ API Connected & Ready';
+                    connectionStatus.style.color = '#27ae60';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                connectionStatus.innerHTML = '⚠️ API Connection Issue';
+                connectionStatus.style.color = '#e74c3c';
+                showStatus('API connection failed. Please check if the server is running.', 'error');
+            }
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        }
+        
+        function handleDragLeave(e) {
+            uploadArea.classList.remove('dragover');
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        }
+        
+        function handleFileSelect(file) {
+            if (!file) return;
+            
+            // Validate file type
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'text/plain'];
+            
+            if (!validTypes.includes(file.type)) {
+                showStatus('❌ Please select a PDF, image, or text file', 'error');
+                return;
+            }
+            
+            // Check file size (16MB)
+            if (file.size > 16 * 1024 * 1024) {
+                showStatus('❌ File size must be less than 16MB', 'error');
+                return;
+            }
+            
+            selectedFile = file;
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            fileInfo.style.display = 'block';
+            processBtn.disabled = false;
+            result.style.display = 'none';
+            showStatus('✅ File ready for processing with your live API', 'success');
+        }
+        
+        async function processFile() {
+            if (!selectedFile) return;
+            
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing with Your Live API...';
+            progress.style.display = 'block';
+            showStatus('📤 Uploading to your deployed API and processing...', 'info');
+            
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/process`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus('✅ Document processed successfully by your live API!', 'success');
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Processing failed');
+                }
+            } catch (error) {
+                showStatus(`❌ Error from your API: ${error.message}`, 'error');
+            } finally {
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="fas fa-magic"></i> Generate AI Summary with Your API';
+                progress.style.display = 'none';
+            }
+        }
+        
+        function displayResults(data) {
+            fullSummary = data.summary;
+            summaryText.textContent = data.summary;
+            
+            // Update download link to use the live API
+            downloadBtn.href = `${API_BASE_URL}${data.download_url}`;
+            
+            // Update stats
+            if (data.stats) {
+                document.getElementById('statFileName').textContent = data.file_info.name || selectedFile.name;
+                document.getElementById('statOriginalLength').textContent = data.stats.original_length + ' chars';
+                document.getElementById('statSummaryLength').textContent = data.stats.summary_length + ' chars';
+                document.getElementById('statCompression').textContent = data.stats.compression_ratio || 'N/A';
+            }
+            
+            result.style.display = 'block';
+        }
+        
+        async function copyToClipboard() {
+            if (!fullSummary) return;
+            
+            try {
+                await navigator.clipboard.writeText(fullSummary);
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy to Clipboard';
+                }, 2000);
+                showStatus('✅ Summary copied to clipboard!', 'success');
+            } catch (error) {
+                showStatus('❌ Failed to copy to clipboard', 'error');
+            }
+        }
+        
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Show initial status
+        showStatus('🚀 Ready to test your live SummaBrowser API! Upload a document to get started.', 'info');
+    </script>
+</body>
+</html>

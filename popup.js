@@ -1,9 +1,11 @@
-// SummaBrowser Enhanced Popup Script
+// SummaBrowser Enhanced Popup Script - Production Version
 class SummaBrowser {
   constructor() {
     this.init();
     this.selectedFile = null;
     this.isProcessing = false;
+    // Production API endpoint
+    this.API_BASE_URL = 'https://summabrowser-api.onrender.com';
   }
 
   init() {
@@ -140,7 +142,7 @@ class SummaBrowser {
     formData.append('file', this.selectedFile);
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/process', {
+      const response = await fetch(`${this.API_BASE_URL}/process`, {
         method: 'POST',
         body: formData,
       });
@@ -170,7 +172,7 @@ class SummaBrowser {
     
     // Update download link
     const downloadLink = document.getElementById('downloadLink');
-    downloadLink.href = `http://127.0.0.1:5000${data.download_url}`;
+    downloadLink.href = `${this.API_BASE_URL}${data.download_url}`;
     downloadLink.style.display = 'block';
     
     // Show summary preview
@@ -289,13 +291,23 @@ class SummaBrowser {
 
   async checkBackendStatus() {
     try {
-      const response = await fetch('http://127.0.0.1:5000/', { method: 'GET' });
+      const response = await fetch(`${this.API_BASE_URL}/health`, { 
+        method: 'GET',
+        mode: 'cors'
+      });
       if (!response.ok) {
-        throw new Error('Backend not running');
+        throw new Error('Backend not responding');
       }
+      const data = await response.json();
+      this.updateStatus('✅ Connected to SummaBrowser API', 'success');
     } catch (error) {
-      this.updateStatus('Backend server not running. Please start the Python server.', 'error');
+      this.updateStatus('⚠️ Connecting to SummaBrowser API...', 'info');
       document.getElementById('uploadButton').disabled = true;
+      
+      // Retry connection after 3 seconds
+      setTimeout(() => {
+        this.checkBackendStatus();
+      }, 3000);
     }
   }
 
