@@ -3,11 +3,13 @@ services:
   - type: web
     name: summabrowser-api
     env: python
-    buildCommand: "pip install -r summary/requirements-simple.txt"
-    startCommand: "cd summary && python app-minimal.py"
+    buildCommand: "pip install -r summary/requirements-ocr.txt"
+    startCommand: "cd summary && python app-ocr.py"
     plan: free
     envVars:
       - key: FLASK_ENV
         value: production
       - key: PORT
         value: "10000"
+      - key: OCR_API_KEY
+        value: "helloworld"
