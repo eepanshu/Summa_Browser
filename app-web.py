@@ -534,7 +534,7 @@ def index():
         </div>
         
         <div class="footer">
-            <p>🚀 Powered by SummaBrowser AI Engine v2.1.0</p>
+            <p>🚀 Powered by SummaBrowser AI Engine v2.2.0 with Video Support</p>
             <p>OCR • PDF Processing • Video Transcription • AI Summarization</p>
         </div>
     </div>
