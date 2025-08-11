@@ -1,0 +1,39 @@
+{
+  "name": "summabrowser",
+  "version": "2.0.0",
+  "description": "AI-powered document summarization browser extension",
+  "main": "popup.js",
+  "scripts": {
+    "start": "python summary/app.py",
+    "install-deps": "pip install -r summary/requirements.txt",
+    "build": "echo 'Building extension...' && npm run validate",
+    "validate": "echo 'Validating extension files...'",
+    "test": "echo 'Running tests...'",
+    "lint": "echo 'Linting code...'"
+  },
+  "keywords": [
+    "browser-extension",
+    "chrome-extension",
+    "ai",
+    "summarization",
+    "ocr",
+    "pdf",
+    "document-processing"
+  ],
+  "author": "SummaBrowser Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/summabrowser.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/summabrowser/issues"
+  },
+  "homepage": "https://github.com/your-username/summabrowser#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0",
+    "python": ">=3.8.0"
+  }
+}

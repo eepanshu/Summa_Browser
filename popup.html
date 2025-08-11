@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SummaBrowser - AI Document Summarizer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-content">
+        <div class="logo-section">
+          <i class="fas fa-brain logo-icon"></i>
+          <h1>SummaBrowser</h1>
+        </div>
+        <div class="theme-toggle">
+          <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider">
+              <i class="fas fa-sun sun-icon"></i>
+              <i class="fas fa-moon moon-icon"></i>
+            </span>
+          </label>
+        </div>
+      </div>
+      <p class="subtitle">AI-powered document summarization</p>
+    </header>
+
+    <main>
+      <div class="upload-section">
+        <div class="file-drop-area" id="fileDropArea">
+          <div class="drop-content">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <p class="drop-text">Drop your files here or</p>
+            <button class="browse-btn" id="browseBtn">
+              <i class="fas fa-folder-open"></i>
+              Browse Files
+            </button>
+            <input type="file" id="fileInput" accept=".pdf,image/*" style="display: none;">
+          </div>
+        </div>
+        
+        <div class="file-info" id="fileInfo" style="display: none;">
+          <div class="file-details">
+            <i class="fas fa-file file-icon"></i>
+            <div class="file-text">
+              <span class="file-name" id="fileName"></span>
+              <span class="file-size" id="fileSize"></span>
+            </div>
+            <button class="remove-file" id="removeFile">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <button class="process-btn" id="uploadButton" disabled>
+          <i class="fas fa-magic"></i>
+          <span class="btn-text">Process Document</span>
+          <div class="btn-loader" style="display: none;">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+        </button>
+      </div>
+
+      <div class="status-section">
+        <div id="status" class="status-message"></div>
+        <div class="progress-bar" id="progressBar" style="display: none;">
+          <div class="progress-fill"></div>
+        </div>
+      </div>
+
+      <div class="result-section" id="resultSection" style="display: none;">
+        <div class="result-header">
+          <h3><i class="fas fa-file-alt"></i> Summary Generated</h3>
+        </div>
+        <div class="result-content">
+          <div class="summary-preview" id="summaryPreview"></div>
+          <div class="result-actions">
+            <a id="downloadLink" href="#" class="download-btn" style="display: none;">
+              <i class="fas fa-download"></i>
+              Download Summary
+            </a>
+            <button class="copy-btn" id="copyBtn" style="display: none;">
+              <i class="fas fa-copy"></i>
+              Copy to Clipboard
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 2025 SummaBrowser. Powered by AI</p>
+        <div class="footer-links">
+          <a href="#" title="Help"><i class="fas fa-question-circle"></i></a>
+          <a href="#" title="Settings"><i class="fas fa-cog"></i></a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Toast notification -->
+  <div class="toast" id="toast">
+    <div class="toast-content">
+      <i class="toast-icon"></i>
+      <span class="toast-message"></span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+Deepanshu Bhadauria
+Deepanshu.Bhadauria_cs.aiml21@gla.ac.in +917983483009 www.linkedin.com/deepanshu-bhadauria-5b985b242/
+https://github.com/eepanshu
+EDUCATION
+Bachelor of Technology in Computer Science Specialization in AI by IBM, GLA University (Percentage:82) June 2025
+INTERNSHIP/TRAINING EXPERIENCE __________________________________________________________________
+Data Cleaning and Information Extraction Intern, IIT BHU May 2023 – July 2023
+Data Operation Intern
+• Collaborated with a team to preprocess and clean large datasets using Python libraries like Pandas and NumPy,
+ensuring data consistency and removing redundancies.
+• Utilized techniques like handling missing values, dealing with outliers, and standardizing data formats for improved
+data quality.
+Club Literario, GLA University, Mathura September 2023 – January2024
+Head of Technical Team
+• Led development of a portal for Club Literario, implementing frontend components using React.js, JavaScript,
+HTML, and CSS.
+PROJECTS
+Build Personal Song Playlists with Machine Learning August 2023 – October 2024
+• Developed an unsupervised K-Means model to categorize songs into distinct groups.
+• Applied data preprocessing techniques such as normalization, scaling, and Principal Component Analysis (PCA)
+for dimensionality reduction.
+• Integrated the model into a React-based UI for user-friendly interaction. Github_Link
+Box Drop Food Ordering App May 2024 - July 2024
+• Developed a meal ordering and delivery app with an integrated product recommendation system.
+• Collaborated on the development of a Flutter-based app for meal ordering and delivery. Github_Link
+• Implemented a product recommendation system to suggest meals based on user preferences and order history.
+OpinionAI: Smart Sentiment Recognition for E-Commerce February 2024 – March 2024
+• Utilized Natural Language Processing (NLP) and machine learning to create a sentiment analysis system.
+• Preprocessed text data using tokenization, stop-word removal, and stemming/lemmatization.
+o Implemented feature extraction techniques such as TF-IDF and word embeddings.
+o Deployed the model to predict sentiment in real-time text data. Github_Link
+o Deployed the model using Flask API and integrated it into an interactive dashboard.
+TECHNICAL SKILLS AND INTERESTS
+Languages: Java (Core), Python, Mysql , React.js, JavaScript, Html , Css, Node.js
+Natural Language Processing (NLP): Text processing, Sentiment analysis, Topic Modeling Machine Learning.
+Soft Skills : Strong Analytical and problem-solving skills , Good Communication
+PROFESSIONAL ACHIEVEMENTS/ INSIGHTS
+• Meta Android Development Certification Certified by META 8 August 2023
+• Micro Experience Certificate Certified by Bluetick.ai 20 November 2023
+• Head of Web Team, Club Literario September 2023 – January 2024
+• Semi-Finalist, Techgium Hackathon by L&T April 2024
+EXTRA/CO-CURRICULAR ACTIVITIES
+• Participation in Techfest Hackathon Organised in IIT Bombay 25 - 29 Dec 2023
