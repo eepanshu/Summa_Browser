@@ -1,0 +1,13 @@
+# Render.yaml - Render deployment configuration
+services:
+  - type: web
+    name: summabrowser-api
+    env: python
+    buildCommand: "pip install -r summary/requirements.txt"
+    startCommand: "cd summary && python app.py"
+    plan: free
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PORT
+        value: "10000"
