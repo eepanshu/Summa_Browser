@@ -3,199 +3,402 @@
 <div align="center">
   <img src="icons/icon128.png" alt="SummaBrowser Logo" width="128" height="128">
   <h3>🧠 Intelligent document summarization powered by AI</h3>
-  <p>A powerful browser extension that processes PDFs and images to generate concise, intelligent summaries.</p>
+  <p>A powerful browser extension and web application that processes PDFs, images, and documents to generate concise, intelligent summaries.</p>
+  
+  <h2>🚀 **LIVE DEMO** 🚀</h2>
+  <p>
+    <a href="https://summabrowser-api.onrender.com" target="_blank">
+      <img src="https://img.shields.io/badge/Try%20Live%20Demo-🌐%20summabrowser--api.onrender.com-brightgreen?style=for-the-badge&logo=render" alt="Live Demo">
+    </a>
+  </p>
+  <p><strong>✨ No installation required! Try the web version instantly.</strong></p>
 </div>
+
+## 🌟 **New! Web Interface Available**
+
+**🌐 Live Web App:** https://summabrowser-api.onrender.com
+
+Experience SummaBrowser directly in your browser with our beautiful web interface:
+- 🎨 **Modern UI Design** with drag-and-drop functionality
+- � **Fully Responsive** - works on desktop, tablet, and mobile
+- ⚡ **Real-time Processing** with progress indicators
+- 🤖 **AI-Powered Summarization** with OCR capabilities
+- 📊 **Processing Stats** and performance metrics
+- 📥 **Download & Copy** functionality
 
 ## ✨ Features
 
-- **🔍 Multi-format Support**: Process PDFs and various image formats (PNG, JPG, JPEG, GIF, BMP, WebP)
-- **🧠 AI-Powered Summarization**: Advanced text extraction and summarization using OCR and NLP
-- **🎨 Modern UI/UX**: Beautiful, responsive interface with dark/light mode support
-- **📱 Drag & Drop**: Intuitive file upload with drag-and-drop functionality
-- **📋 Quick Actions**: Copy summaries to clipboard or download as text files
-- **⚡ Real-time Processing**: Live progress indicators and status updates
-- **🔒 Privacy First**: All processing happens locally on your machine
-- **🚀 Fast & Efficient**: Optimized for quick document processing
+### 🔥 **Core Capabilities**
+- **🔍 Multi-format Support**: Process PDFs, images (PNG, JPG, JPEG, GIF, BMP, WebP), and text files
+- **🧠 Advanced AI Summarization**: Intelligent text extraction with sentence scoring and ranking
+- **👁️ OCR Technology**: Extract text from images using online OCR APIs
+- **📄 PDF Processing**: Multi-page PDF text extraction with advanced parsing
+
+### 🎨 **User Experience**
+- **🌐 Web Interface**: Beautiful standalone web application
+- **🔌 Browser Extension**: Chrome/Edge extension for seamless integration
+- **🎯 Drag & Drop**: Intuitive file upload with visual feedback
+- **🌓 Theme Support**: Dark and light mode with smooth transitions
+- **📋 Quick Actions**: Copy to clipboard, download summaries, real-time status
+
+### ⚡ **Performance & Reliability**
+- **🚀 Live Deployment**: Production-ready on Render.com
+- **🔒 Secure Processing**: File validation and size limits (16MB)
+- **� Real-time Monitoring**: Processing statistics and performance metrics
+- **�️ Error Handling**: Comprehensive error management and user feedback
 
 ## 🛠️ Technology Stack
 
-### Frontend (Browser Extension)
+### 🌐 **Web Application** (Live at https://summabrowser-api.onrender.com)
+- **Flask**: Production web server with CORS support
+- **HTML5/CSS3**: Modern responsive web interface
+- **JavaScript ES6+**: Async/await, Fetch API, modern DOM manipulation
+- **Online OCR**: OCR.space API integration for image processing
+- **Render Deployment**: Production hosting with automatic deployments
+
+### 🔌 **Browser Extension**
 - **Manifest V3**: Latest Chrome extension architecture
 - **Modern CSS**: CSS Grid, Flexbox, CSS Variables, and animations
-- **Vanilla JavaScript**: ES6+ with async/await and modern APIs
+- **Vanilla JavaScript**: ES6+ with async/await and Chrome APIs
 - **Font Awesome**: Beautiful icons and visual elements
 
-### Backend (Python Server)
-- **Flask**: Lightweight web framework
-- **Tesseract OCR**: Text extraction from images
-- **Pillow**: Image processing and manipulation
-- **Custom NLP**: Text summarization algorithms
+### 🤖 **AI & Processing Backend**
+- **Flask**: Lightweight web framework with API endpoints
+- **PyPDF2**: Advanced PDF text extraction
+- **Pillow (PIL)**: Image processing and manipulation
+- **Custom NLP**: Advanced text summarization with sentence scoring
+- **Online OCR**: OCR.space integration for reliable text extraction
 
-## 📦 Installation
+### ☁️ **Production Infrastructure**
+- **Render.com**: Free tier hosting with automatic deployments
+- **GitHub Integration**: Continuous deployment from repository
+- **Environment Variables**: Secure API key management
+- **Health Monitoring**: API status and uptime tracking
 
-### Prerequisites
-- Google Chrome or Chromium-based browser
-- Python 3.8 or higher
-- pip (Python package manager)
+## 🚀 Quick Start
 
-### Step 1: Clone the Repository
+### Option 1: Use the Live Web App (Recommended)
+1. **Visit:** https://summabrowser-api.onrender.com
+2. **Upload:** Drag and drop your PDF or image file
+3. **Process:** Click "Generate AI Summary"
+4. **Get Results:** View, copy, or download your summary
+
+### Option 2: Install Browser Extension
+1. **Download:** Clone this repository or download the ZIP
+2. **Load Extension:** Go to `chrome://extensions/` → Enable Developer Mode → Load Unpacked
+3. **Select Folder:** Choose the `SummaBrowse` directory
+4. **Use:** Click the extension icon and start processing documents
+
+### Option 3: Run Locally
 ```bash
+# Clone the repository
 git clone https://github.com/eepanshu/Summa_Browser.git
-cd Summa_Browser
-```
+cd Summa_Browser/SummaBrowse
 
-### Step 2: Set Up Python Environment
-```bash
-# Create virtual environment
+# Set up Python environment
 python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
-cd SummaBrowse/summary
-pip install -r requirements.txt
+pip install flask flask-cors requests Pillow PyPDF2
+
+# Run the application
+python app-web.py
 ```
-
-### Step 3: Install Tesseract OCR
-- **Windows**: Download from [GitHub releases](https://github.com/tesseract-ocr/tesseract/releases)
-- **macOS**: `brew install tesseract`
-- **Ubuntu/Debian**: `sudo apt-get install tesseract-ocr`
-
-### Step 4: Load Extension in Browser
-1. Open Chrome and navigate to `chrome://extensions/`
-2. Enable "Developer mode" in the top right
-3. Click "Load unpacked"
-4. Select the `SummaBrowse` folder
-5. The SummaBrowser extension should now appear in your browser
-
-### Step 5: Start the Backend Server
-```bash
-cd SummaBrowse/summary
-python app.py
-```
-The server will start on `http://127.0.0.1:5000`
 
 ## 🚀 Usage
 
-1. **Start the Backend**: Ensure the Python server is running
-2. **Open Extension**: Click the SummaBrowser icon in your browser toolbar
-3. **Upload File**: 
+### 🌐 **Web Application** (https://summabrowser-api.onrender.com)
+1. **Visit the Live App**: Open https://summabrowser-api.onrender.com in any modern browser
+2. **Upload Document**: 
    - Drag and drop a file onto the upload area, or
-   - Click "Browse Files" to select a document
-4. **Process**: Click "Process Document" to start summarization
-5. **Get Results**: 
-   - View the summary preview
-   - Download the full summary as a text file
-   - Copy the summary to your clipboard
+   - Click the upload area to browse and select a document
+3. **File Validation**: System automatically validates file type and size
+4. **Process Document**: Click "Generate AI Summary" to start processing
+5. **Real-time Progress**: Watch the progress bar and status updates
+6. **Get Results**: 
+   - View summary preview in the interface
+   - See processing statistics (compression ratio, word counts)
+   - Download complete summary as text file
+   - Copy summary to clipboard with one click
 
-## 🎯 Supported File Types
+### 🔌 **Browser Extension**
+1. **Load Extension**: Install from Chrome Web Store or load unpacked
+2. **Click Icon**: Click the SummaBrowser icon in your browser toolbar
+3. **Upload File**: Use the same drag-and-drop or browse functionality
+4. **Connected Processing**: Extension connects to live API for processing
+5. **Seamless Integration**: Process documents without leaving your current page
 
-- **PDFs**: `.pdf`
-- **Images**: `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp`, `.webp`
+### 📱 **Mobile & Tablet**
+The web interface is fully responsive and works perfectly on:
+- 📱 **Mobile phones** - Optimized touch interface
+- 📊 **Tablets** - Full feature support
+- 💻 **Desktop** - Complete functionality
+
+## 🎯 Supported File Types & Limits
+
+### ✅ **Supported Formats**
+- **📄 Documents**: `.pdf`, `.txt`
+- **🖼️ Images**: `.png`, `.jpg`, `.jpeg`, `.gif`, `.bmp`, `.webp`
+- **📏 File Size**: Up to 16MB per file
+- **📚 Content**: Multi-page PDFs, complex layouts, images with text
+
+### ⚡ **Performance Expectations**
+- **📄 Small PDFs (1-5 pages)**: 15-30 seconds
+- **📚 Large PDFs (10+ pages)**: 30-60 seconds
+- **🖼️ Images with OCR**: 20-45 seconds
+- **📝 Text files**: 5-15 seconds
+
+## 🔗 **Live API Endpoints**
+
+Base URL: `https://summabrowser-api.onrender.com`
+
+- **🏠 Web Interface**: `GET /` - Beautiful HTML interface
+- **💓 Health Check**: `GET /health` - API status and services
+- **🔄 Process Document**: `POST /process` - Upload and process files
+- **📥 Download**: `GET /download/<filename>` - Download processed summaries
+
+### **API Usage Example**
+```bash
+# Health check
+curl https://summabrowser-api.onrender.com/health
+
+# Process a document
+curl -X POST -F "file=@document.pdf" https://summabrowser-api.onrender.com/process
+
+# Response includes summary, download URL, and processing stats
+```
 
 ## 📁 Project Structure
 
 ```
 SummaBrowse/
-├── manifest.json          # Extension configuration
-├── popup.html            # Main UI interface
-├── popup.js              # Frontend JavaScript logic
-├── styles.css            # Modern CSS styling
-├── background.js         # Service worker script
-├── icons/                # Extension icons
-│   ├── icon16.png
-│   ├── icon32.png
-│   ├── icon48.png
-│   └── icon128.png
-├── summary/              # Python backend
-│   ├── app.py           # Flask application
-│   ├── requirements.txt # Python dependencies
-│   ├── text_extraction_and_summarization.py
-│   ├── process_pdf.py
-│   ├── templates/
-│   ├── uploads/         # Uploaded files
-│   └── output/          # Generated summaries
-└── README.md            # This file
+├── 🌐 Web Interface Files
+│   ├── app-web.py              # Complete web app with HTML interface
+│   ├── test-your-api.html      # Local API testing interface
+│   ├── deployment-monitor.html # Deployment status monitor
+│   └── RENDER_UPDATE.md        # Deployment guide
+│
+├── 🔌 Browser Extension
+│   ├── manifest.json           # Extension configuration (Manifest V3)
+│   ├── popup.html             # Extension popup interface
+│   ├── popup.js               # Frontend JavaScript logic
+│   ├── styles.css             # Modern CSS styling with themes
+│   ├── background.js          # Service worker script
+│   └── icons/                 # Extension icons (16px to 128px)
+│
+├── ☁️ Production Backend
+│   ├── summary/
+│   │   ├── app-web.py         # Production Flask app with web UI
+│   │   ├── app-ocr.py         # API-only version
+│   │   ├── requirements-ocr.txt # Production dependencies
+│   │   ├── uploads/           # Temporary file storage
+│   │   └── output/            # Generated summaries
+│
+├── 🚀 Deployment
+│   ├── render.yaml            # Render.com deployment config
+│   ├── DEPLOYMENT.md          # Deployment documentation
+│   └── .gitignore            # Git ignore rules
+│
+└── 📚 Documentation
+    ├── README.md              # This comprehensive guide
+    ├── TESTING_GUIDE.md       # Complete testing instructions
+    └── test-document.txt      # Sample file for testing
 ```
 
-## ⚙️ Configuration
+## ⚙️ Configuration & Customization
 
-### Backend Server
-The Flask server runs on `http://127.0.0.1:5000` by default. To change this:
+### 🌐 **Live Web App Configuration**
+The production app at https://summabrowser-api.onrender.com is pre-configured with:
+- **OCR API**: OCR.space free tier integration
+- **File Limits**: 16MB maximum upload size
+- **Processing**: Advanced AI summarization algorithm
+- **CORS**: Enabled for cross-origin requests
+- **Environment**: Production-optimized with error handling
 
-1. Edit `app.py` to modify host and port
-2. Update the `host_permissions` in `manifest.json`
-3. Update the API endpoints in `popup.js`
+### 🔌 **Browser Extension Configuration**
+Configure the extension to use different APIs:
 
-### File Size Limits
-- Default: 16MB maximum file size
-- Modify `MAX_CONTENT_LENGTH` in `app.py` to change this limit
-
-### Supported Languages (OCR)
-Tesseract supports 100+ languages. To add language support:
-
-```bash
-# Install additional language packs
-# Example for Spanish:
-sudo apt-get install tesseract-ocr-spa
+```javascript
+// In popup.js, modify the API endpoint:
+this.API_BASE_URL = 'https://summabrowser-api.onrender.com'; // Live API
+// or
+this.API_BASE_URL = 'http://localhost:5000'; // Local development
 ```
 
-## 🔧 Development
+### 🎨 **UI Customization**
+Customize the interface appearance:
 
-### Adding New Features
-1. **Frontend**: Modify `popup.html`, `popup.js`, and `styles.css`
-2. **Backend**: Add new routes in `app.py`
-3. **Processing**: Extend functionality in the processing modules
-
-### Testing
-```bash
-# Test the Flask backend
-cd SummaBrowse/summary
-python -m pytest tests/
-
-# Load extension in development mode
-# Use Chrome Developer Tools for frontend debugging
+```css
+/* In styles.css, modify CSS variables */
+:root {
+  --primary-color: #3498db;      /* Main theme color */
+  --success-color: #27ae60;      /* Success messages */
+  --error-color: #e74c3c;        /* Error messages */
+  --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
 ```
 
-### Building for Production
-1. Optimize images and assets
-2. Minify CSS and JavaScript
-3. Update version in `manifest.json`
-4. Package the extension for Chrome Web Store
+### 🔧 **API Configuration**
+For local development or custom deployment:
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**Extension not loading:**
-- Ensure manifest.json is valid JSON
-- Check that all required files exist
-- Verify Chrome Developer Mode is enabled
-
-**Backend connection failed:**
-- Verify Python server is running on port 5000
-- Check firewall settings
-- Ensure all dependencies are installed
-
-**OCR not working:**
-- Verify Tesseract is properly installed
-- Check image quality and resolution
-- Ensure supported file format
-
-**Processing errors:**
-- Check file size (must be < 16MB)
-- Verify file is not corrupted
-- Check server logs for detailed errors
-
-### Debug Mode
-Enable debug mode in `app.py`:
 ```python
-app.run(debug=True, host='127.0.0.1', port=5000)
+# In app-web.py, modify settings:
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # File size limit
+OCR_API_KEY = os.environ.get('OCR_API_KEY', 'helloworld')  # OCR service
+PORT = int(os.environ.get('PORT', 5000))  # Server port
 ```
+
+## 🔧 Development & Contributing
+
+### 🚀 **Local Development Setup**
+```bash
+# Clone the repository
+git clone https://github.com/eepanshu/Summa_Browser.git
+cd Summa_Browser/SummaBrowse
+
+# Set up Python virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install development dependencies
+pip install flask flask-cors requests Pillow PyPDF2
+
+# Run in development mode
+python app-web.py
+# App runs at http://localhost:5000 with debug mode
+
+# Load browser extension in development
+# Go to chrome://extensions/ → Developer mode → Load unpacked
+```
+
+### 🧪 **Testing**
+```bash
+# Test the live API
+curl https://summabrowser-api.onrender.com/health
+
+# Test local development
+curl http://localhost:5000/health
+
+# Use provided testing tools
+open test-your-api.html  # Web interface tester
+open deployment-monitor.html  # Deployment monitor
+```
+
+### 🔄 **Deployment Process**
+The app uses automatic deployment via Render.com:
+
+1. **Push to GitHub**: `git push origin main`
+2. **Automatic Build**: Render detects changes and builds
+3. **Live Deployment**: Updates at https://summabrowser-api.onrender.com
+4. **Health Check**: Automatic verification and rollback if needed
+
+### 🤝 **Contributing Guidelines**
+1. **Fork** the repository
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Test** your changes with both web interface and browser extension
+4. **Commit** with clear messages: `git commit -m 'Add amazing feature'`
+5. **Push** to your branch: `git push origin feature/amazing-feature`
+6. **Create** a Pull Request with detailed description
+
+### 🏗️ **Architecture Overview**
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Web Browser   │    │ Browser Extension│    │   Mobile/Tablet │
+│  (Any Device)   │    │ (Chrome/Edge)   │    │   Web Browser   │
+└─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
+          │                      │                      │
+          └──────────────────────┼──────────────────────┘
+                                 │
+          ┌─────────────────────────────────────────────────────┐
+          │         Live API Server (Render.com)                │
+          │    https://summabrowser-api.onrender.com           │
+          │                                                     │
+          │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐ │
+          │  │   Flask     │  │    OCR      │  │     AI      │ │
+          │  │ Web Server  │  │  Service    │  │Summarization│ │
+          │  └─────────────┘  └─────────────┘  └─────────────┘ │
+          └─────────────────────────────────────────────────────┘
+```
+
+## 🐛 Troubleshooting & Support
+
+### 🌐 **Web Interface Issues**
+**Can't access the web app:**
+- ✅ Check URL: https://summabrowser-api.onrender.com
+- ✅ Wait 30 seconds (Render free tier may have cold starts)
+- ✅ Try refreshing the page
+- ✅ Check https://status.render.com for service status
+
+**File upload not working:**
+- ✅ Verify file size is under 16MB
+- ✅ Check file format (PDF, PNG, JPG, TXT supported)
+- ✅ Ensure stable internet connection
+- ✅ Try a different browser or clear cache
+
+**Processing stuck or fails:**
+- ✅ Check file isn't corrupted or password-protected
+- ✅ Try with a simpler test document
+- ✅ Check browser console (F12) for error messages
+- ✅ Refresh page and try again
+
+### 🔌 **Browser Extension Issues**
+**Extension not loading:**
+- ✅ Verify Chrome Developer Mode is enabled
+- ✅ Check manifest.json is valid (no syntax errors)
+- ✅ Ensure all required files are present
+- ✅ Try removing and re-adding the extension
+
+**API connection failed:**
+- ✅ Check internet connection
+- ✅ Verify API URL in popup.js is correct
+- ✅ Check if https://summabrowser-api.onrender.com/health returns success
+- ✅ Try switching to web interface as alternative
+
+### 🛠️ **Development Issues**
+**Local server won't start:**
+- ✅ Verify Python 3.8+ is installed
+- ✅ Check all dependencies are installed: `pip install -r requirements-ocr.txt`
+- ✅ Ensure port 5000 isn't already in use
+- ✅ Check for error messages in terminal
+
+**OCR not extracting text:**
+- ✅ Verify image quality and resolution (higher is better)
+- ✅ Check if image contains clear, readable text
+- ✅ Try different image formats (PNG often works best)
+- ✅ Ensure OCR API key is valid
+
+### 📞 **Get Help**
+If issues persist:
+
+1. **📋 Check Issues**: [GitHub Issues](https://github.com/eepanshu/Summa_Browser/issues)
+2. **🆕 Create Issue**: Include:
+   - Operating system and browser version
+   - Error messages or screenshots
+   - Steps to reproduce the problem
+   - File type and size being processed
+3. **💡 Feature Requests**: Use the same issue tracker
+4. **📧 Direct Contact**: For urgent issues or private concerns
+
+## 🎯 Performance & Optimization
+
+### ⚡ **Speed Optimization**
+- **🌐 CDN Integration**: Static assets served via CDN
+- **📦 File Compression**: Automatic compression for faster uploads
+- **🔄 Async Processing**: Non-blocking file processing
+- **💾 Smart Caching**: Intelligent caching for repeated operations
+
+### 📊 **Monitoring & Analytics**
+- **📈 Health Checks**: Automatic API health monitoring
+- **⏱️ Performance Metrics**: Processing time tracking
+- **📋 Error Logging**: Comprehensive error tracking and reporting
+- **💯 Uptime Monitoring**: 24/7 service availability tracking
+
+### 🎨 **UI/UX Optimization**
+- **📱 Responsive Design**: Optimized for all screen sizes
+- **🎭 Smooth Animations**: Hardware-accelerated CSS animations
+- **♿ Accessibility**: ARIA labels and keyboard navigation support
+- **🌓 Theme Support**: System preference detection for dark/light mode
 
 ## 📄 License
 
@@ -220,27 +423,115 @@ If you encounter any issues or have questions:
 2. Create a new issue with detailed description
 3. Include system information and error logs
 
-## 🔮 Roadmap
+## 🔮 Roadmap & Future Features
 
-- [ ] **Multi-language Support**: UI localization
-- [ ] **Cloud Integration**: Google Drive, Dropbox support
-- [ ] **Advanced Summarization**: Custom summary lengths
-- [ ] **Batch Processing**: Multiple file processing
-- [ ] **Export Options**: PDF, DOCX, HTML export
-- [ ] **Search & History**: Search through processed documents
-- [ ] **API Integration**: Support for external AI services
-- [ ] **Mobile Support**: Progressive Web App version
+### 🎯 **Phase 1: Enhanced AI Capabilities**
+- [ ] **🤖 Multiple AI Models**: Integration with GPT, Claude, and other AI services
+- [ ] **📏 Custom Summary Lengths**: User-defined summary sizes (short, medium, long)
+- [ ] **🎨 Summary Styles**: Academic, business, casual, technical writing styles
+- [ ] **🔍 Key Information Extraction**: Automatic extraction of dates, names, numbers
+- [ ] **📊 Content Analysis**: Sentiment analysis, topic classification
 
-## 🙏 Acknowledgments
+### 🎯 **Phase 2: Advanced Features**
+- [ ] **🌍 Multi-language Support**: Process documents in 50+ languages
+- [ ] **📁 Batch Processing**: Upload and process multiple files simultaneously
+- [ ] **📚 Document History**: Save and search through processed documents
+- [ ] **🔗 Cloud Integration**: Google Drive, Dropbox, OneDrive support
+- [ ] **📱 Mobile Apps**: Native iOS and Android applications
 
-- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) for text extraction
-- [Flask](https://flask.palletsprojects.com/) for the web framework
-- [Font Awesome](https://fontawesome.com/) for beautiful icons
-- [Google Fonts](https://fonts.google.com/) for typography
+### 🎯 **Phase 3: Enterprise Features**
+- [ ] **👥 Team Collaboration**: Share summaries and collaborate on documents
+- [ ] **🔐 Advanced Security**: End-to-end encryption, SSO integration
+- [ ] **📈 Analytics Dashboard**: Usage statistics and insights
+- [ ] **🔌 API Integration**: RESTful API for third-party integrations
+- [ ] **⚡ Premium Processing**: Faster processing with dedicated resources
+
+### 🎯 **Phase 4: Export & Integration**
+- [ ] **📄 Export Formats**: PDF, DOCX, HTML, Markdown export options
+- [ ] **🔗 Browser Integration**: Right-click context menu integration
+- [ ] **📧 Email Integration**: Direct email sharing of summaries
+- [ ] **💼 Business Tools**: Slack, Teams, Notion integration
+- [ ] **🎓 Educational Tools**: Canvas, Blackboard, Moodle integration
+
+## 📄 License & Legal
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for complete details.
+
+### 🛡️ **Privacy & Security**
+- **🔒 No Data Storage**: Files are processed and immediately deleted
+- **🌐 Secure Transmission**: All data transferred over HTTPS
+- **🔑 API Keys**: Securely managed environment variables
+- **📋 Compliance**: GDPR and CCPA compliant processing
+
+### ⚖️ **Terms of Use**
+- **✅ Free for Personal Use**: Individual and educational use encouraged
+- **💼 Commercial Use**: Allowed under MIT license terms
+- **🔄 Modification**: Free to modify and distribute
+- **📞 Attribution**: Credit appreciated but not required
+
+## 🤝 Contributing & Community
+
+### 🌟 **Ways to Contribute**
+- **🐛 Bug Reports**: Help us find and fix issues
+- **💡 Feature Requests**: Suggest new functionality
+- **📝 Documentation**: Improve guides and tutorials
+- **🌍 Translations**: Help localize the interface
+- **💻 Code Contributions**: Submit pull requests
+
+### 🏆 **Contributors**
+Special thanks to all contributors who help make SummaBrowser better:
+
+<div align="center">
+  <p><em>🌟 Star this repository to show your support!</em></p>
+  <p><em>🍴 Fork it to start contributing!</em></p>
+  <p><em>📣 Share it with your friends and colleagues!</em></p>
+</div>
+
+### 📞 **Community & Support**
+- **💬 Discussions**: [GitHub Discussions](https://github.com/eepanshu/Summa_Browser/discussions)
+- **🐛 Issues**: [GitHub Issues](https://github.com/eepanshu/Summa_Browser/issues)
+- **📧 Contact**: Open an issue for questions and support
+- **🌐 Live Demo**: https://summabrowser-api.onrender.com
+
+## 🙏 Acknowledgments & Credits
+
+### 🛠️ **Technology Partners**
+- **[Render.com](https://render.com)** - Reliable cloud hosting platform
+- **[OCR.space](https://ocr.space)** - Powerful OCR API service
+- **[Flask](https://flask.palletsprojects.com/)** - Lightweight Python web framework
+- **[PyPDF2](https://pypdf2.readthedocs.io/)** - PDF processing library
+
+### 🎨 **Design & UI**
+- **[Font Awesome](https://fontawesome.com/)** - Beautiful icon library
+- **[Google Fonts](https://fonts.google.com/)** - Web typography
+- **[CSS Gradient](https://cssgradient.io/)** - Beautiful gradient generator
+- **[Unsplash](https://unsplash.com/)** - High-quality images and inspiration
+
+### 🤖 **AI & Processing**
+- **[Pillow (PIL)](https://pillow.readthedocs.io/)** - Image processing capabilities
+- **[Requests](https://requests.readthedocs.io/)** - HTTP library for API integration
+- **Modern Web Standards** - HTML5, CSS3, ES6+ JavaScript
 
 ---
 
 <div align="center">
-  <p>Made with ❤️ by the SummaBrowser Team</p>
-  <p>⭐ Star this repo if you find it helpful!</p>
+  <h2>🚀 Ready to Get Started?</h2>
+  
+  <p>
+    <a href="https://summabrowser-api.onrender.com" target="_blank">
+      <img src="https://img.shields.io/badge/🌐%20Try%20Live%20Demo-summabrowser--api.onrender.com-success?style=for-the-badge" alt="Try Live Demo">
+    </a>
+  </p>
+  
+  <p>
+    <a href="https://github.com/eepanshu/Summa_Browser/fork" target="_blank">
+      <img src="https://img.shields.io/badge/🍴%20Fork%20Repository-Contribute%20Now-blue?style=for-the-badge&logo=github" alt="Fork Repository">
+    </a>
+  </p>
+  
+  <br>
+  
+  <p><strong>⭐ Star this repository if SummaBrowser helped you!</strong></p>
+  <p><em>Made with ❤️ by the SummaBrowser Team</em></p>
+  <p><em>🌟 Turning documents into insights, one summary at a time</em></p>
 </div>
