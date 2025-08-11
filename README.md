@@ -40,8 +40,8 @@
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/your-username/summabrowser.git
-cd summabrowser
+git clone https://github.com/eepanshu/Summa_Browser.git
+cd Summa_Browser
 ```
 
 ### Step 2: Set Up Python Environment
@@ -216,7 +216,7 @@ Contributions are welcome! Please feel free to submit a Pull Request. For major 
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/your-username/summabrowser/issues) page
+1. Check the [Issues](https://github.com/eepanshu/Summa_Browser/issues) page
 2. Create a new issue with detailed description
 3. Include system information and error logs
 

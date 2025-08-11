@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/summabrowser.git"
+    "url": "https://github.com/eepanshu/Summa_Browser.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/summabrowser/issues"
+    "url": "https://github.com/eepanshu/Summa_Browser/issues"
   },
-  "homepage": "https://github.com/your-username/summabrowser#readme",
+  "homepage": "https://github.com/eepanshu/Summa_Browser#readme",
   "devDependencies": {},
   "dependencies": {},
   "engines": {
