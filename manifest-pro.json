@@ -1,0 +1,82 @@
+{
+  "manifest_version": 3,
+  "name": "SummaBrowse Pro - AI Document & Video Intelligence",
+  "version": "3.0.0",
+  "description": "Professional AI-powered platform for intelligent document analysis, video summarization, and content extraction. Transform your workflow with advanced AI technology.",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "scripting"
+  ],
+  
+  "host_permissions": [
+    "https://summabrowser-api.onrender.com/*",
+    "https://*/*",
+    "http://*/*"
+  ],
+  
+  "action": {
+    "default_popup": "popup-pro.html",
+    "default_title": "SummaBrowse Pro - AI Analysis",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["icons/*", "styles-pro.css"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "commands": {
+    "summarize-selection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Summarize selected text"
+    },
+    "summarize-page": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+P",
+        "mac": "Command+Shift+P"
+      },
+      "description": "Summarize entire page"
+    }
+  },
+  
+  "author": "SummaBrowse Pro Team",
+  "homepage_url": "https://summabrowser-api.onrender.com",
+  
+  "minimum_chrome_version": "88",
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎥 Video Support Deployment Monitor</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .status-card.success {
+            border-left-color: #27ae60;
+            background: linear-gradient(135deg, #d5f4e6, #e8f8f5);
+        }
+        
+        .status-card.error {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fadbd8, #f8d7da);
+        }
+        
+        .status-card.warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(135deg, #fef9e7, #fff3cd);
+        }
+        
+        .check-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .check-btn.video {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .check-btn.video:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        
+        .url {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            word-break: break-all;
+        }
+        
+        .log {
+            background: #2c3e50;
+            color: #1dd;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin: 20px 0;
+        }
+        
+        .progress {
+            width: 100%;
+            height: 6px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .deployment-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #bdc3c7;
+        }
+        
+        .status-indicator.active {
+            background: #27ae60;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.error {
+            background: #e74c3c;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 Video Support Deployment Monitor</h1>
+            <p>Monitoring SummaBrowser deployment for video processing capabilities</p>
+        </div>
+        
+        <div class="status-card" id="deploymentCard">
+            <h3>🚀 Deployment Progress</h3>
+            <div class="deployment-status">
+                <div class="status-indicator" id="deploymentIndicator"></div>
+                <span id="deploymentStatus">Checking deployment status...</span>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div class="status-card">
+            <h3>🌐 Live URL</h3>
+            <div class="url">https://summabrowser-api.onrender.com</div>
+            <button class="check-btn" onclick="checkDeployment()">🔍 Check Now</button>
+            <button class="check-btn video" onclick="testVideoFeature()">🎥 Test Video</button>
+            <button class="check-btn" onclick="openLiveApp()">🚀 Open App</button>
+        </div>
+        
+        <div class="status-card">
+            <h3>✅ What We Fixed</h3>
+            <ul>
+                <li>✅ <strong>render.yaml</strong> - Updated paths to use root directory</li>
+                <li>✅ <strong>requirements.txt</strong> - Now uses correct requirements file</li>
+                <li>✅ <strong>app-web.py</strong> - Now uses correct Python app with video support</li>
+                <li>✅ <strong>Dependencies</strong> - Added youtube-transcript-api and pytube</li>
+            </ul>
+        </div>
+        
+        <div class="status-card">
+            <h3>🎯 Expected After Deployment</h3>
+            <ul>
+                <li>🎨 Modern UI with "Intelligent Document & Video Summarizer" subtitle</li>
+                <li>🎥 YouTube URL input field with gradient styling</li>
+                <li>📹 Video processing endpoint at /process-video</li>
+                <li>🤖 AI-powered video summarization</li>
+                <li>📄 Existing PDF and image processing (unchanged)</li>
+            </ul>
+        </div>
+        
+        <div class="log" id="log">
+[Monitor Started] Waiting for deployment to complete...
+
+Expected Changes:
+✅ render.yaml updated to use correct paths
+✅ Will now deploy app-web.py with video support
+✅ Should install requirements.txt with video dependencies
+
+Checking every 30 seconds for deployment updates...
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'https://summabrowser-api.onrender.com';
+        let checkInterval;
+        let progressValue = 0;
+        
+        function log(message, type = 'info') {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            logElement.innerHTML += `\n[${timestamp}] ${icon} ${message}`;
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        function updateDeploymentStatus(status, message, type = 'info') {
+            const card = document.getElementById('deploymentCard');
+            const indicator = document.getElementById('deploymentIndicator');
+            const statusText = document.getElementById('deploymentStatus');
+            const progressBar = document.getElementById('progressBar');
+            
+            statusText.textContent = message;
+            
+            if (type === 'success') {
+                card.className = 'status-card success';
+                indicator.className = 'status-indicator active';
+                progressBar.style.width = '100%';
+            } else if (type === 'error') {
+                card.className = 'status-card error';
+                indicator.className = 'status-indicator error';
+            } else if (type === 'warning') {
+                card.className = 'status-card warning';
+                indicator.className = 'status-indicator';
+                progressValue = Math.min(progressValue + 10, 90);
+                progressBar.style.width = progressValue + '%';
+            } else {
+                card.className = 'status-card';
+                indicator.className = 'status-indicator';
+                progressValue = Math.min(progressValue + 5, 70);
+                progressBar.style.width = progressValue + '%';
+            }
+        }
+        
+        async function checkDeployment() {
+            log('Checking deployment status...');
+            
+            try {
+                // Check if web interface is accessible
+                const response = await fetch(API_URL, {
+                    headers: { 'Accept': 'text/html' }
+                });
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    
+                    // Check for video support indicators
+                    const hasVideoSupport = html.includes('Video Summarizer') || 
+                                           html.includes('videoUrlInput') ||
+                                           html.includes('YouTube') ||
+                                           html.includes('v2.2.0');
+                    
+                    if (hasVideoSupport) {
+                        log('🎉 SUCCESS! Video support detected in deployment!', 'success');
+                        updateDeploymentStatus('deployed', 'Deployment successful with video support!', 'success');
+                        clearInterval(checkInterval);
+                        return true;
+                    } else {
+                        log('⚠️ Web interface found but video support not yet deployed', 'warning');
+                        updateDeploymentStatus('updating', 'Deployment in progress - video support not detected yet', 'warning');
+                        return false;
+                    }
+                } else {
+                    log(`❌ HTTP ${response.status} - Deployment may be restarting`, 'error');
+                    updateDeploymentStatus('error', `HTTP ${response.status} - Service may be restarting`, 'error');
+                    return false;
+                }
+            } catch (error) {
+                log(`❌ Connection error: ${error.message}`, 'error');
+                updateDeploymentStatus('error', `Connection error: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        async function testVideoFeature() {
+            log('Testing video processing endpoint...');
+            
+            try {
+                const formData = new FormData();
+                formData.append('video_url', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ');
+                
+                const response = await fetch(`${API_URL}/process-video`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.status === 404) {
+                    log('❌ Video endpoint not found - deployment not complete', 'error');
+                    return false;
+                } else if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        log('🎥 Video processing works! Summary generated successfully!', 'success');
+                        return true;
+                    } else {
+                        log(`⚠️ Video endpoint exists but processing failed: ${data.error}`, 'warning');
+                        return false;
+                    }
+                } else {
+                    log(`⚠️ Video endpoint responded with ${response.status}`, 'warning');
+                    return false;
+                }
+            } catch (error) {
+                log(`❌ Video test failed: ${error.message}`, 'error');
+                return false;
+            }
+        }
+        
+        function openLiveApp() {
+            window.open(API_URL, '_blank');
+            log('🚀 Opened live app in new tab');
+        }
+        
+        // Start monitoring
+        log('🎯 Deployment fix deployed! Checking for video support...');
+        updateDeploymentStatus('checking', 'Deployment fix applied - checking for video support', 'info');
+        
+        // Initial check after 10 seconds
+        setTimeout(checkDeployment, 10000);
+        
+        // Check every 30 seconds
+        checkInterval = setInterval(async () => {
+            const success = await checkDeployment();
+            if (!success) {
+                log('🔄 Still waiting for video support deployment...');
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

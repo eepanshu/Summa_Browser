@@ -1,0 +1,20 @@
+# Minimal working requirements for SummaBrowser with Video Support
+# Designed for Python 3.13 compatibility on Render
+
+Flask==2.3.3
+Flask-CORS==4.0.0  
+Werkzeug==2.3.7
+
+# Document processing
+PyPDF2==3.0.1
+requests==2.31.0
+
+# Video processing
+youtube-transcript-api==0.6.1
+pytube==15.0.0
+
+# Web server
+gunicorn==21.2.0
+
+# Note: Pillow removed to fix build issues on Python 3.13
+# Image processing is now optional and handled gracefully

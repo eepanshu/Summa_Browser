@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎥 SummaBrowser Video Integration - Live Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin: 20px 0;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            margin: 0;
+        }
+        
+        .status-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .test-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        
+        .test-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .test-card.success {
+            border-left-color: #27ae60;
+            background: linear-gradient(135deg, #d5f4e6, #e8f8f5);
+        }
+        
+        .test-card.error {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fadbd8, #f8d7da);
+        }
+        
+        .test-card.warning {
+            border-left-color: #f39c12;
+            background: linear-gradient(135deg, #fef9e7, #fff3cd);
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        
+        .test-button.youtube {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .test-button.youtube:hover {
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        
+        .video-demo {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .demo-input {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px;
+            border: 2px dashed #e74c3c;
+            border-radius: 10px;
+            font-size: 16px;
+            margin: 20px 0;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-input:focus {
+            border-color: #c0392b;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        #testResults {
+            margin-top: 30px;
+            padding: 20px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎥 SummaBrowser Video Integration - Live Test Suite</h1>
+            <p>Test your enhanced SummaBrowser with comprehensive video processing capabilities</p>
+        </div>
+        
+        <div class="video-demo">
+            <h3>🎬 Quick Video Test</h3>
+            <p>Paste any YouTube URL to test video processing:</p>
+            <input type="url" 
+                   class="demo-input" 
+                   id="quickTestUrl" 
+                   placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                   value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+            <br>
+            <button class="test-button youtube" onclick="quickVideoTest()">
+                🎥 Process This Video
+            </button>
+        </div>
+        
+        <div class="status-section">
+            <div class="test-card" id="deploymentStatus">
+                <h3>🚀 Deployment Status</h3>
+                <p>Checking if video features are deployed...</p>
+                <button class="test-button" onclick="checkDeploymentStatus()">Check Status</button>
+            </div>
+            
+            <div class="test-card" id="webInterfaceStatus">
+                <h3>🌐 Web Interface</h3>
+                <p>Testing HTML interface with video support...</p>
+                <button class="test-button" onclick="checkWebInterface()">Test Interface</button>
+            </div>
+            
+            <div class="test-card" id="videoEndpointStatus">
+                <h3>📹 Video Endpoint</h3>
+                <p>Testing /process-video API endpoint...</p>
+                <button class="test-button" onclick="checkVideoEndpoint()">Test Endpoint</button>
+            </div>
+            
+            <div class="test-card" id="youtubeProcessing">
+                <h3>🎬 YouTube Processing</h3>
+                <p>Testing actual video summarization...</p>
+                <button class="test-button youtube" onclick="testYouTubeProcessing()">Test YouTube</button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <h3>🎯 Current Features Available</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">📄</div>
+                    <h4>PDF Processing</h4>
+                    <p>Extract text and generate summaries from PDF documents</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🖼️</div>
+                    <h4>Image OCR</h4>
+                    <p>Extract text from images using advanced OCR</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎥</div>
+                    <h4>YouTube Videos</h4>
+                    <p>Extract transcripts and generate summaries from YouTube</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <h4>AI Summarization</h4>
+                    <p>Advanced text summarization with sentence scoring</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="testResults">Ready to test video functionality...
+        
+Deployment URL: https://summabrowser-api.onrender.com
+Expected Features:
+✅ PDF & Image processing (existing)
+🎥 YouTube video URL input (NEW)
+📹 Video transcript extraction (NEW)
+🤖 Video summarization (NEW)
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'https://summabrowser-api.onrender.com';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            results.innerHTML += `\n[${timestamp}] ${icon} ${message}`;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        function updateCard(cardId, status, message) {
+            const card = document.getElementById(cardId);
+            card.className = `test-card ${status}`;
+            card.querySelector('p').textContent = message;
+        }
+        
+        async function checkDeploymentStatus() {
+            log('Checking deployment status...');
+            updateCard('deploymentStatus', 'warning', 'Checking deployment...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`Health check: ${data.status}`, 'success');
+                    updateCard('deploymentStatus', 'success', `Deployment active: ${data.status}`);
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                log(`Deployment check failed: ${error.message}`, 'error');
+                updateCard('deploymentStatus', 'error', `Deployment issue: ${error.message}`);
+            }
+        }
+        
+        async function checkWebInterface() {
+            log('Checking web interface for video support...');
+            updateCard('webInterfaceStatus', 'warning', 'Checking interface...');
+            
+            try {
+                const response = await fetch(API_BASE, {
+                    headers: { 'Accept': 'text/html' }
+                });
+                
+                if (response.ok) {
+                    const html = await response.text();
+                    const hasVideoSupport = html.includes('video-input') || 
+                                           html.includes('YouTube') || 
+                                           html.includes('videoUrlInput') ||
+                                           html.includes('Video URL') ||
+                                           html.includes('v2.2.0');
+                    
+                    if (hasVideoSupport) {
+                        log('✅ Web interface has video support!', 'success');
+                        updateCard('webInterfaceStatus', 'success', 'Video support detected in UI!');
+                    } else {
+                        log('⚠️ Web interface found but no video support detected', 'warning');
+                        updateCard('webInterfaceStatus', 'warning', 'Interface exists but video support unclear');
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                log(`Web interface check failed: ${error.message}`, 'error');
+                updateCard('webInterfaceStatus', 'error', `Interface issue: ${error.message}`);
+            }
+        }
+        
+        async function checkVideoEndpoint() {
+            log('Testing video processing endpoint...');
+            updateCard('videoEndpointStatus', 'warning', 'Testing endpoint...');
+            
+            try {
+                const formData = new FormData();
+                formData.append('video_url', ''); // Empty test
+                
+                const response = await fetch(`${API_BASE}/process-video`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.status === 404) {
+                    log('❌ Video endpoint not found - deployment not updated', 'error');
+                    updateCard('videoEndpointStatus', 'error', 'Video endpoint missing');
+                } else {
+                    const data = await response.json();
+                    log('✅ Video endpoint exists and responds', 'success');
+                    updateCard('videoEndpointStatus', 'success', 'Video endpoint active');
+                }
+            } catch (error) {
+                log(`Video endpoint test failed: ${error.message}`, 'error');
+                updateCard('videoEndpointStatus', 'error', `Endpoint issue: ${error.message}`);
+            }
+        }
+        
+        async function testYouTubeProcessing() {
+            log('Testing YouTube video processing...');
+            updateCard('youtubeProcessing', 'warning', 'Processing test video...');
+            
+            const testUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+            
+            try {
+                const formData = new FormData();
+                formData.append('video_url', testUrl);
+                
+                const response = await fetch(`${API_BASE}/process-video`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        log(`✅ YouTube processing successful! Summary: ${data.summary.substring(0, 100)}...`, 'success');
+                        updateCard('youtubeProcessing', 'success', 'YouTube processing works!');
+                    } else {
+                        log(`⚠️ YouTube endpoint exists but failed: ${data.error}`, 'warning');
+                        updateCard('youtubeProcessing', 'warning', `Processing error: ${data.error}`);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                log(`YouTube processing failed: ${error.message}`, 'error');
+                updateCard('youtubeProcessing', 'error', `Processing failed: ${error.message}`);
+            }
+        }
+        
+        async function quickVideoTest() {
+            const url = document.getElementById('quickTestUrl').value;
+            if (!url) {
+                log('Please enter a YouTube URL', 'warning');
+                return;
+            }
+            
+            log(`Testing video: ${url}`);
+            
+            try {
+                const formData = new FormData();
+                formData.append('video_url', url);
+                
+                const response = await fetch(`${API_BASE}/process-video`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        log(`🎥 Video processed successfully!`, 'success');
+                        log(`📹 Title: ${data.metadata?.title || 'N/A'}`, 'success');
+                        log(`📝 Summary: ${data.summary}`, 'success');
+                        log(`🎬 Method: ${data.processing_method}`, 'success');
+                    } else {
+                        log(`❌ Video processing failed: ${data.error}`, 'error');
+                    }
+                } else {
+                    log(`❌ HTTP ${response.status}: ${response.statusText}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Quick test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-run initial tests
+        setTimeout(() => {
+            checkDeploymentStatus();
+            checkWebInterface();
+            checkVideoEndpoint();
+        }, 1000);
+        
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+            checkDeploymentStatus();
+        }, 30000);
+    </script>
+</body>
+</html>
