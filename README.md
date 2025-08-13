@@ -240,13 +240,16 @@ Customize the interface appearance:
 ```
 
 ### 🔧 **API Configuration**
-For local development or custom deployment:
+For local development or custom deployment (never hardcode secrets):
 
 ```python
 # In app-web.py, modify settings:
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # File size limit
 OCR_API_KEY = os.environ.get('OCR_API_KEY', 'helloworld')  # OCR service
 PORT = int(os.environ.get('PORT', 5000))  # Server port
+
+# AssemblyAI key must be provided via environment
+# ASSEMBLYAI_API_KEY is read by video_integration.py
 ```
 
 ## 🔧 Development & Contributing

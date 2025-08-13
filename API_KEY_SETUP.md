@@ -2,7 +2,7 @@
 
 ## AssemblyAI API Key Setup
 
-Your AssemblyAI API Key: `3f07e0254b9240a1bef7287cb6a22cdc`
+Your AssemblyAI API Key: `<your_key_here>`
 
 ### 🚀 Render Deployment Setup (REQUIRED)
 
@@ -16,7 +16,7 @@ Your AssemblyAI API Key: `3f07e0254b9240a1bef7287cb6a22cdc`
    - Click **"Add Environment Variable"**
    - Enter:
      - **Key**: `ASSEMBLYAI_API_KEY`  
-     - **Value**: `3f07e0254b9240a1bef7287cb6a22cdc`
+     - **Value**: set your key (kept secret in Render)
 
 3. **Save and Deploy**:
    - Click **"Save Changes"**

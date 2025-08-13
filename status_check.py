@@ -47,7 +47,7 @@ def check_current_status():
                     print("   Go to Render Dashboard → Your Service → Environment")
                     print("   Add environment variable:")
                     print("   Key: ASSEMBLYAI_API_KEY")
-                    print("   Value: 3f07e0254b9240a1bef7287cb6a22cdc")
+                    print("   Value: <hidden>")
                     print("   Then click 'Save Changes' to redeploy")
         else:
             print(f"❌ HTTP Error: {response.status_code}")
@@ -93,4 +93,4 @@ if __name__ == "__main__":
     else:
         print("❌ Video processing needs configuration")
         print("💡 Add ASSEMBLYAI_API_KEY to your Render environment variables")
-        print("🔑 Key: 3f07e0254b9240a1bef7287cb6a22cdc")
+        print("🔑 Key: <hidden>")

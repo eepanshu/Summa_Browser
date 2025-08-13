@@ -172,7 +172,7 @@ def main():
         elif success is False:
             print("\n🔧 ISSUES DETECTED:")
             print("💡 Check if ASSEMBLYAI_API_KEY is added to Render environment variables")
-            print("💡 Key should be: 3f07e0254b9240a1bef7287cb6a22cdc")
+            print("💡 Set ASSEMBLYAI_API_KEY env var before running this test")
         else:
             print("\n⏰ TIMEOUT:")
             print("💡 Processing is likely working but takes time")

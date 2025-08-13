@@ -3,11 +3,15 @@
 Test script to verify AssemblyAI API key validity
 """
 
+import os
 import assemblyai as aai
 
 def test_api_key():
     """Test if the AssemblyAI API key is valid"""
-    api_key = "3f07e0254b9240a1bef7287cb6a22cdc"
+    api_key = os.environ.get("ASSEMBLYAI_API_KEY", "")
+    if not api_key:
+        print("❌ ASSEMBLYAI_API_KEY not set in environment")
+        return False
     
     print(f"Testing API key: {api_key[:8]}...{api_key[-4:]}")
     

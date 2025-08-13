@@ -144,7 +144,7 @@ def main():
     else:
         print("\n❌ API key not configured. Please add to Render environment variables:")
         print("   Key: ASSEMBLYAI_API_KEY")
-        print("   Value: 3f07e0254b9240a1bef7287cb6a22cdc")
+        print("   Value: <hidden>")
 
 if __name__ == "__main__":
     main()

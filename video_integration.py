@@ -51,7 +51,8 @@ def advanced_summarize(text):
 class VideoProcessor:
     def __init__(self):
         self.youtube_api_key = os.environ.get('YOUTUBE_API_KEY')
-        self.assemblyai_key = os.environ.get('ASSEMBLYAI_API_KEY', '3f07e0254b9240a1bef7287cb6a22cdc')  # Default key
+        # Never hardcode API keys. Read from env only.
+        self.assemblyai_key = os.environ.get('ASSEMBLYAI_API_KEY')
         self.deepgram_key = os.environ.get('DEEPGRAM_API_KEY')
     
     def extract_youtube_id(self, url):
@@ -117,6 +118,8 @@ class VideoProcessor:
             import assemblyai as aai
             
             # Set API key
+            if not self.assemblyai_key:
+                return None, "AssemblyAI API key not configured"
             aai.settings.api_key = self.assemblyai_key
             
             # Configure transcription with correct API (only supported parameters)
@@ -186,6 +189,8 @@ class VideoProcessor:
                     import assemblyai as aai
                     
                     # Set API key
+                    if not self.assemblyai_key:
+                        return None, "AssemblyAI API key not configured"
                     aai.settings.api_key = self.assemblyai_key
                     
                     # Configure transcription
