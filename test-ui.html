@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Test - SummaBrowser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .upload-area {
+            border: 3px dashed #e9ecef;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 2rem;
+        }
+        .upload-area:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .video-upload-area {
+            border: 3px dashed #e9ecef;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        .video-upload-area:hover {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            display: none;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>SummaBrowser UI Test</h1>
+    
+    <div class="test-section">
+        <h2>Document Upload Test</h2>
+        <div class="upload-area" id="docUploadArea">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">📄</div>
+            <div style="font-size: 1.25rem; margin-bottom: 0.5rem;">Drop documents here</div>
+            <div style="color: #7f8c8d;">Supports PDF, Images, Text files (up to 16MB)</div>
+        </div>
+        <input type="file" id="docFileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.webp,.txt">
+        <div id="docFileInfo" class="file-info">
+            <div id="docFileName" style="font-weight: 600; color: #28a745;"></div>
+            <div id="docFileSize" style="color: #6c757d; font-size: 0.9rem;"></div>
+        </div>
+        <button id="docProcessBtn" disabled>Process Document</button>
+        <div id="docStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Video Upload Test</h2>
+        <div class="video-upload-area" id="videoUploadArea">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎥</div>
+            <div style="font-size: 1rem;">Drop video files here</div>
+            <div style="font-size: 0.9rem;">Supports MP4, AVI, MOV, MP3, WAV (up to 16MB)</div>
+        </div>
+        <input type="file" id="videoFileInput" accept=".mp4,.avi,.mov,.mp3,.wav">
+        <div id="videoFileInfo" class="file-info">
+            <div id="videoFileName" style="font-weight: 600; color: #28a745;"></div>
+            <div id="videoFileSize" style="color: #6c757d; font-size: 0.9rem;"></div>
+        </div>
+        <button id="videoProcessBtn" disabled>Process Video</button>
+        <div id="videoStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults">
+            <p>Click on the upload areas and select files to test functionality.</p>
+        </div>
+    </div>
+
+    <script>
+        // Document upload functionality
+        const docUploadArea = document.getElementById('docUploadArea');
+        const docFileInput = document.getElementById('docFileInput');
+        const docFileInfo = document.getElementById('docFileInfo');
+        const docFileName = document.getElementById('docFileName');
+        const docFileSize = document.getElementById('docFileSize');
+        const docProcessBtn = document.getElementById('docProcessBtn');
+        const docStatus = document.getElementById('docStatus');
+
+        // Video upload functionality
+        const videoUploadArea = document.getElementById('videoUploadArea');
+        const videoFileInput = document.getElementById('videoFileInput');
+        const videoFileInfo = document.getElementById('videoFileInfo');
+        const videoFileName = document.getElementById('videoFileName');
+        const videoFileSize = document.getElementById('videoFileSize');
+        const videoProcessBtn = document.getElementById('videoProcessBtn');
+        const videoStatus = document.getElementById('videoStatus');
+
+        // Document upload events
+        docUploadArea.addEventListener('click', () => docFileInput.click());
+        docUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            docUploadArea.style.borderColor = '#28a745';
+            docUploadArea.style.background = '#f0fff4';
+        });
+        docUploadArea.addEventListener('dragleave', () => {
+            docUploadArea.style.borderColor = '#e9ecef';
+            docUploadArea.style.background = '#f8f9fa';
+        });
+        docUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            docUploadArea.style.borderColor = '#e9ecef';
+            docUploadArea.style.background = '#f8f9fa';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleDocFileSelect(files[0]);
+            }
+        });
+
+        // Video upload events
+        videoUploadArea.addEventListener('click', () => videoFileInput.click());
+        videoUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            videoUploadArea.style.borderColor = '#28a745';
+            videoUploadArea.style.background = '#f0fff4';
+        });
+        videoUploadArea.addEventListener('dragleave', () => {
+            videoUploadArea.style.borderColor = '#e9ecef';
+            videoUploadArea.style.background = 'rgba(255, 255, 255, 0.9)';
+        });
+        videoUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            videoUploadArea.style.borderColor = '#e9ecef';
+            videoUploadArea.style.background = 'rgba(255, 255, 255, 0.9)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleVideoFileSelect(files[0]);
+            }
+        });
+
+        // File input events
+        docFileInput.addEventListener('change', (e) => handleDocFileSelect(e.target.files[0]));
+        videoFileInput.addEventListener('change', (e) => handleVideoFileSelect(e.target.files[0]));
+
+        // Button events
+        docProcessBtn.addEventListener('click', () => {
+            showStatus(docStatus, 'Document processing started!', 'success');
+        });
+        videoProcessBtn.addEventListener('click', () => {
+            showStatus(videoStatus, 'Video processing started!', 'success');
+        });
+
+        function handleDocFileSelect(file) {
+            if (!file) return;
+            
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'text/plain'];
+            
+            if (!validTypes.includes(file.type)) {
+                showStatus(docStatus, 'Please select a PDF, image, or text file', 'error');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                showStatus(docStatus, 'File size must be less than 16MB', 'error');
+                return;
+            }
+            
+            docFileName.textContent = file.name;
+            docFileSize.textContent = formatFileSize(file.size);
+            docFileInfo.style.display = 'block';
+            docProcessBtn.disabled = false;
+            showStatus(docStatus, '✅ Document file ready for processing', 'success');
+            updateTestResults('Document file selected: ' + file.name);
+        }
+
+        function handleVideoFileSelect(file) {
+            if (!file) return;
+
+            const allowedExtensions = {'.mp4', '.avi', '.mov', '.mp3', '.wav', '.m4a', '.wma'};
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.has(fileExt)) {
+                showStatus(videoStatus, 'Unsupported video file type. Please select a MP4, AVI, MOV, MP3, WAV, M4A, or WMA file.', 'error');
+                return;
+            }
+
+            if (file.size > 16 * 1024 * 1024) {
+                showStatus(videoStatus, 'Video file size must be less than 16MB', 'error');
+                return;
+            }
+
+            videoFileName.textContent = file.name;
+            videoFileSize.textContent = formatFileSize(file.size);
+            videoFileInfo.style.display = 'block';
+            videoProcessBtn.disabled = false;
+            showStatus(videoStatus, '✅ Video file ready for processing', 'success');
+            updateTestResults('Video file selected: ' + file.name);
+        }
+
+        function showStatus(element, message, type) {
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                if (type !== 'success') {
+                    element.innerHTML = '';
+                }
+            }, 5000);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function updateTestResults(message) {
+            const results = document.getElementById('testResults');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `<p><strong>[${timestamp}]</strong> ${message}</p>`;
+        }
+    </script>
+</body>
+</html>

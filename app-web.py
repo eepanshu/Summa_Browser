@@ -462,6 +462,31 @@ def index():
             display: none;
         }
         
+        /* Video upload area styling */
+        .video-upload-area {
+            border: 3px dashed #e9ecef;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+        
+        .video-upload-area:hover {
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .video-upload-area.dragover {
+            border-color: #28a745;
+            background: #f0fff4;
+        }
+        
         .video-section {
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
             border-radius: 16px;
@@ -760,9 +785,22 @@ def index():
             
             <div id="videoSection" style="display: none;">
                 <div class="video-section">
-                    <h3><i class="fab fa-youtube"></i> YouTube Video Analysis</h3>
-                    <p style="margin-top: 0.5rem; opacity: 0.9;">Paste a YouTube URL to extract transcript and generate AI summary</p>
+                    <h3><i class="fab fa-youtube"></i> Video Analysis</h3>
+                    <p style="margin-top: 0.5rem; opacity: 0.9;">Upload video files or paste YouTube URLs for AI analysis</p>
+                    
+                    <!-- Video File Upload -->
+                    <div class="video-upload-area" id="videoUploadArea" style="margin-bottom: 1rem;">
+                        <div class="upload-icon" style="font-size: 2rem; margin-bottom: 0.5rem;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="upload-text" style="font-size: 1rem;">Drop video files here</div>
+                        <div class="upload-hint" style="font-size: 0.9rem;">Supports MP4, AVI, MOV, MP3, WAV (up to 16MB)</div>
+                        <input type="file" id="videoFileInput" accept=".mp4,.avi,.mov,.mp3,.wav" style="display: none;">
+                    </div>
+                    
+                    <!-- YouTube URL Input -->
                     <div class="video-input">
+                        <label style="display: block; margin-bottom: 0.5rem; color: #2c3e50; font-weight: 500;">Or enter YouTube URL:</label>
                         <input type="url" id="videoUrlInput" placeholder="https://www.youtube.com/watch?v=...">
                         <div id="videoInfo" style="margin-top: 1rem; display: none;">
                             <div id="videoTitle" style="font-weight: 600; color: #2c3e50;"></div>
@@ -772,9 +810,16 @@ def index():
                 </div>
             </div>
             
-            <div id="fileInfo" style="display: none; background: #e8f5e8; border: 1px solid #28a745; border-radius: 10px; padding: 1rem; margin: 1rem 0;">
-                <div id="fileName" style="font-weight: 600; color: #28a745;"></div>
-                <div id="fileSize" style="color: #6c757d; font-size: 0.9rem;"></div>
+            <!-- Document File Info -->
+            <div id="documentFileInfo" style="display: none; background: #e8f5e8; border: 1px solid #28a745; border-radius: 10px; padding: 1rem; margin: 1rem 0;">
+                <div id="documentFileName" style="font-weight: 600; color: #28a745;"></div>
+                <div id="documentFileSize" style="color: #6c757d; font-size: 0.9rem;"></div>
+            </div>
+            
+            <!-- Video File Info -->
+            <div id="videoFileInfo" style="display: none; background: #e8f5e8; border: 1px solid #28a745; border-radius: 10px; padding: 1rem; margin: 1rem 0;">
+                <div id="videoFileName" style="font-weight: 600; color: #28a745;"></div>
+                <div id="videoFileSize" style="color: #6c757d; font-size: 0.9rem;"></div>
             </div>
             
             <button class="process-button" id="processBtn" disabled>
@@ -837,6 +882,7 @@ def index():
     <script>
         let selectedFile = null;
         let selectedVideoUrl = null;
+        let selectedVideoFile = null;
         let fullSummary = null;
         let currentInputType = 'document';
         
@@ -847,13 +893,18 @@ def index():
         const videoSection = document.getElementById('videoSection');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
+        const videoFileInput = document.getElementById('videoFileInput');
+        const videoUploadArea = document.getElementById('videoUploadArea');
         const videoUrlInput = document.getElementById('videoUrlInput');
         const videoInfo = document.getElementById('videoInfo');
         const videoTitle = document.getElementById('videoTitle');
         const videoMeta = document.getElementById('videoMeta');
-        const fileInfo = document.getElementById('fileInfo');
-        const fileName = document.getElementById('fileName');
-        const fileSize = document.getElementById('fileSize');
+        const documentFileInfo = document.getElementById('documentFileInfo');
+        const documentFileName = document.getElementById('documentFileName');
+        const documentFileSize = document.getElementById('documentFileSize');
+        const videoFileInfo = document.getElementById('videoFileInfo');
+        const videoFileName = document.getElementById('videoFileName');
+        const videoFileSize = document.getElementById('videoFileSize');
         const processBtn = document.getElementById('processBtn');
         const progress = document.getElementById('progress');
         const statusMessage = document.getElementById('statusMessage');
@@ -867,13 +918,32 @@ def index():
         videoTab.addEventListener('click', () => switchTab('video'));
         
         // Upload events
-        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('click', () => {
+            console.log('Document upload area clicked');
+            fileInput.click();
+        });
         uploadArea.addEventListener('dragover', handleDragOver);
         uploadArea.addEventListener('dragleave', handleDragLeave);
         uploadArea.addEventListener('drop', handleDrop);
         
+        // Video upload events
+        videoUploadArea.addEventListener('click', () => {
+            console.log('Video upload area clicked');
+            videoFileInput.click();
+        });
+        videoUploadArea.addEventListener('dragover', handleVideoDragOver);
+        videoUploadArea.addEventListener('dragleave', handleVideoDragLeave);
+        videoUploadArea.addEventListener('drop', handleVideoDrop);
+        
         // Input events
-        fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files[0]));
+        fileInput.addEventListener('change', (e) => {
+            console.log('Document file input changed:', e.target.files[0]?.name);
+            handleFileSelect(e.target.files[0]);
+        });
+        videoFileInput.addEventListener('change', (e) => {
+            console.log('Video file input changed:', e.target.files[0]?.name);
+            handleVideoFileSelect(e.target.files[0]);
+        });
         videoUrlInput.addEventListener('input', handleVideoUrlInput);
         processBtn.addEventListener('click', processInput);
         copyBtn.addEventListener('click', copyToClipboard);
@@ -899,7 +969,9 @@ def index():
         function resetForm() {
             selectedFile = null;
             selectedVideoUrl = null;
-            fileInfo.style.display = 'none';
+            selectedVideoFile = null;
+            documentFileInfo.style.display = 'none';
+            videoFileInfo.style.display = 'none';
             videoInfo.style.display = 'none';
             result.style.display = 'none';
             processBtn.disabled = true;
@@ -923,6 +995,24 @@ def index():
                 handleFileSelect(files[0]);
             }
         }
+
+        function handleVideoDragOver(e) {
+            e.preventDefault();
+            videoUploadArea.classList.add('dragover');
+        }
+
+        function handleVideoDragLeave() {
+            videoUploadArea.classList.remove('dragover');
+        }
+
+        function handleVideoDrop(e) {
+            e.preventDefault();
+            videoUploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleVideoFileSelect(files[0]);
+            }
+        }
         
         function handleFileSelect(file) {
             if (!file) return;
@@ -940,12 +1030,37 @@ def index():
             }
             
             selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = formatFileSize(file.size);
-            fileInfo.style.display = 'block';
+            documentFileName.textContent = file.name;
+            documentFileSize.textContent = formatFileSize(file.size);
+            documentFileInfo.style.display = 'block';
             processBtn.disabled = false;
             result.style.display = 'none';
             showStatus('✅ File ready for processing', 'success');
+        }
+
+        function handleVideoFileSelect(file) {
+            if (!file) return;
+
+            const allowedExtensions = ['.mp4', '.avi', '.mov', '.mp3', '.wav', '.m4a', '.wma'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExt)) {
+                showStatus('Unsupported video file type. Please select a MP4, AVI, MOV, MP3, WAV, M4A, or WMA file.', 'error');
+                return;
+            }
+
+            if (file.size > 16 * 1000 * 1000) {
+                showStatus('Video file size must be less than 16MB', 'error');
+                return;
+            }
+
+            selectedVideoFile = file;
+            videoFileName.textContent = file.name;
+            videoFileSize.textContent = formatFileSize(file.size);
+            videoFileInfo.style.display = 'block';
+            processBtn.disabled = false;
+            result.style.display = 'none';
+            showStatus('✅ Video file ready for processing', 'success');
         }
         
         function handleVideoUrlInput() {
@@ -958,7 +1073,8 @@ def index():
                 return;
             }
             
-            const isYouTube = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/.test(url);
+            const youtubePattern = new RegExp('^(https?:\\/\\/)?(www\\.)?(youtube\\.com\\/watch\\?v=|youtu\\.be\\/)[\\w-]+');
+            const isYouTube = youtubePattern.test(url);
             
             if (isYouTube) {
                 selectedVideoUrl = url;
@@ -977,8 +1093,8 @@ def index():
         }
         
         function extractVideoId(url) {
-            const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-            return match ? match[1] : 'Unknown';
+            const idMatch = url.match(new RegExp('(?:youtube\\.com\\/watch\\?v=|youtu\\.be\\/)([^&\\n?#]+)'));
+            return idMatch ? idMatch[1] : 'Unknown';
         }
         
         async function processInput() {
@@ -986,6 +1102,8 @@ def index():
                 await processVideo();
             } else if (currentInputType === 'document' && selectedFile) {
                 await processFile();
+            } else if (currentInputType === 'video' && selectedVideoFile) {
+                await processVideoFile();
             }
         }
         
@@ -1052,6 +1170,38 @@ def index():
                 progress.style.display = 'none';
             }
         }
+
+        async function processVideoFile() {
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Video File...';
+            progress.style.display = 'block';
+            showStatus('🎥 Processing video file and generating summary...', 'info');
+
+            const formData = new FormData();
+            formData.append('video_file', selectedVideoFile);
+
+            try {
+                const response = await fetch('/process-video-file', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showStatus('✅ Video file processed successfully!', 'success');
+                    displayResults(data);
+                } else {
+                    throw new Error(data.error || 'Video file processing failed');
+                }
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+            } finally {
+                processBtn.disabled = false;
+                processBtn.innerHTML = '<i class="fas fa-magic"></i> Generate AI Summary';
+                progress.style.display = 'none';
+            }
+        }
         
         function displayResults(data) {
             fullSummary = data.summary;
@@ -1099,6 +1249,54 @@ def index():
         
         // Initialize
         showStatus('🚀 SummaBrowse Pro is ready! Choose your input type and start processing.', 'info');
+        
+        // Debug: Verify all elements are loaded
+        function verifyElements() {
+            const elements = {
+                'documentTab': documentTab,
+                'videoTab': videoTab,
+                'documentSection': documentSection,
+                'videoSection': videoSection,
+                'uploadArea': uploadArea,
+                'fileInput': fileInput,
+                'videoFileInput': videoFileInput,
+                'videoUploadArea': videoUploadArea,
+                'videoUrlInput': videoUrlInput,
+                'videoInfo': videoInfo,
+                'videoTitle': videoTitle,
+                'videoMeta': videoMeta,
+                'documentFileInfo': documentFileInfo,
+                'documentFileName': documentFileName,
+                'documentFileSize': documentFileSize,
+                'videoFileInfo': videoFileInfo,
+                'videoFileName': videoFileName,
+                'videoFileSize': videoFileSize,
+                'processBtn': processBtn,
+                'progress': progress,
+                'statusMessage': statusMessage,
+                'result': result,
+                'summaryContent': summaryContent,
+                'downloadBtn': downloadBtn,
+                'copyBtn': copyBtn
+            };
+            
+            let allFound = true;
+            for (const [name, element] of Object.entries(elements)) {
+                if (!element) {
+                    console.error(`Element not found: ${name}`);
+                    allFound = false;
+                }
+            }
+            
+            if (allFound) {
+                console.log('✅ All DOM elements loaded successfully');
+            } else {
+                console.error('❌ Some DOM elements failed to load');
+            }
+        }
+        
+        // Run verification after a short delay to ensure DOM is fully loaded
+        setTimeout(verifyElements, 100);
     </script>
 </body>
 </html>
@@ -1263,6 +1461,123 @@ def file_too_large(e):
         'max_size': '16MB',
         'suggestion': 'Please compress your file or use a smaller image'
     }), 413
+
+@app.route('/process-video-file', methods=['POST'])
+def process_video_file():
+    try:
+        if 'video_file' not in request.files:
+            return jsonify({'error': 'No video file uploaded'}), 400
+
+        video_file = request.files['video_file']
+        if video_file.filename == '':
+            return jsonify({'error': 'No video file selected'}), 400
+
+        # Validate file type
+        allowed_extensions = {'.mp4', '.avi', '.mov', '.mp3', '.wav', '.m4a', '.wma'}
+        file_ext = os.path.splitext(video_file.filename.lower())[1]
+        
+        if file_ext not in allowed_extensions:
+            return jsonify({
+                'error': 'Unsupported video file type', 
+                'supported': 'MP4, AVI, MOV, MP3, WAV, M4A, WMA'
+            }), 400
+
+        # Secure filename
+        filename = secure_filename(video_file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        # Handle duplicate filenames
+        counter = 1
+        original_path = file_path
+        while os.path.exists(file_path):
+            base, ext = os.path.splitext(original_path)
+            file_path = f"{base}_{counter}{ext}"
+            filename = os.path.basename(file_path)
+            counter += 1
+
+        # Save file
+        video_file.save(file_path)
+        logger.info(f'Processing video file: {filename}')
+
+        try:
+            # Try to import video processing
+            from video_integration import process_video_request
+            
+            # Process the video file using AssemblyAI
+            result = process_video_request(file_path, 'file')
+            
+            if result.get('success'):
+                # Generate summary file
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                summary_filename = f"video_file_summary_{timestamp}.txt"
+                summary_path = os.path.join(OUTPUT_FOLDER, summary_filename)
+                
+                # Create summary content
+                transcript = result.get('transcript', '')
+                summary = result.get('summary', '')
+                
+                summary_content = f"""SummaBrowser AI - Video File Summary Report
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+File: {filename}
+Type: {file_ext.upper()}
+Size: {os.path.getsize(file_path)} bytes
+Processing Method: {result.get('type', 'AssemblyAI')}
+
+SUMMARY:
+{summary}
+
+FULL TRANSCRIPT:
+{transcript}
+
+---
+Processed by SummaBrowser AI Engine v2.1.0
+Video processing capability powered by AI transcription
+"""
+                
+                # Save summary to file
+                with open(summary_path, 'w', encoding='utf-8') as f:
+                    f.write(summary_content)
+                
+                return jsonify({
+                    'success': True,
+                    'summary': summary,
+                    'transcript': transcript[:1000] + '...' if len(transcript) > 1000 else transcript,
+                    'download_url': f'/download/{summary_filename}',
+                    'processing_method': result.get('type', 'AssemblyAI'),
+                    'file_info': {
+                        'name': filename,
+                        'size': os.path.getsize(file_path),
+                        'type': file_ext
+                    }
+                })
+            
+            else:
+                return jsonify({
+                    'success': False,
+                    'error': result.get('error', 'Video processing failed')
+                })
+                
+        except ImportError:
+            return jsonify({
+                'success': False,
+                'error': 'Video processing feature is not available. Please install required dependencies'
+            })
+            
+    except Exception as e:
+        logger.error(f'Video file processing error: {str(e)}')
+        return jsonify({
+            'success': False,
+            'error': f'Video file processing failed: {str(e)}'
+        })
+    
+    finally:
+        # Clean up uploaded file
+        try:
+            if 'file_path' in locals() and os.path.exists(file_path):
+                os.remove(file_path)
+                logger.info(f'Cleaned up video file: {filename}')
+        except Exception as e:
+            logger.warning(f'Video file cleanup failed: {e}')
 
 @app.route('/process-video', methods=['POST'])
 def process_video():

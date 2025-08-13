@@ -11,6 +11,9 @@ requests>=2.31.0
 youtube-transcript-api>=0.6.0
 pytube>=15.0.0
 
+# AI Transcription
+assemblyai>=0.43.0
+
 # Development
 gunicorn>=21.0.0
 

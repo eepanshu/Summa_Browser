@@ -36,10 +36,10 @@ def advanced_summarize(text):
         sentence_scores = {}
         for sentence in sentences:
             for word in sentence.lower().split():
-                if word in word_freq:
-                    if sentence not in sentence_scores:
-                        sentence_scores[sentence] = 0
-                    sentence_scores[sentence] += word_freq[word]
+                if word in sentence_scores:
+                    sentence_scores[sentence] += word_freq.get(word, 0)
+                else:
+                    sentence_scores[sentence] = word_freq.get(word, 0)
         
         # Get top sentences
         top_sentences = sorted(sentence_scores.items(), key=lambda x: x[1], reverse=True)
@@ -51,7 +51,7 @@ def advanced_summarize(text):
 class VideoProcessor:
     def __init__(self):
         self.youtube_api_key = os.environ.get('YOUTUBE_API_KEY')
-        self.assemblyai_key = os.environ.get('ASSEMBLYAI_API_KEY')
+        self.assemblyai_key = os.environ.get('ASSEMBLYAI_API_KEY', '3f07e0254b9240a1bef7287cb6a22cdc')  # Default key
         self.deepgram_key = os.environ.get('DEEPGRAM_API_KEY')
     
     def extract_youtube_id(self, url):
@@ -112,61 +112,49 @@ class VideoProcessor:
             return None, f"YouTube processing failed: {str(e)}"
     
     def transcribe_with_assemblyai(self, video_url):
-        """Use AssemblyAI for video transcription"""
-        if not self.assemblyai_key:
-            return None, "AssemblyAI API key not provided"
-        
+        """Use official AssemblyAI package for video transcription"""
         try:
-            headers = {
-                'authorization': self.assemblyai_key,
-                'content-type': 'application/json'
-            }
+            import assemblyai as aai
             
-            data = {
-                'audio_url': video_url,
-                'auto_highlights': True,
-                'summary': True,
-                'summary_model': 'informative',
-                'summary_type': 'bullets'
-            }
+            # Set API key
+            aai.settings.api_key = self.assemblyai_key
             
-            # Submit for transcription
-            response = requests.post(
-                'https://api.assemblyai.com/v2/transcript',
-                json=data,
-                headers=headers
+            # Configure transcription with correct API (only supported parameters)
+            config = aai.TranscriptionConfig(
+                speech_model=aai.SpeechModel.best,
+                auto_highlights=True
             )
             
-            if response.status_code != 200:
-                return None, f"AssemblyAI submission failed: {response.text}"
+            # Transcribe the audio/video
+            transcript = aai.Transcriber(config=config).transcribe(video_url)
             
-            transcript_id = response.json()['id']
+            if transcript.status == "error":
+                return None, f"AssemblyAI transcription failed: {transcript.error}"
             
-            # Poll for completion
-            max_attempts = 60  # 5 minutes max
-            for attempt in range(max_attempts):
-                response = requests.get(
-                    f'https://api.assemblyai.com/v2/transcript/{transcript_id}',
-                    headers=headers
-                )
-                
-                result = response.json()
-                
-                if result['status'] == 'completed':
-                    return {
-                        'success': True,
-                        'transcript': result['text'],
-                        'summary': result.get('summary', ''),
-                        'highlights': result.get('auto_highlights_result', {}).get('results', []),
-                        'type': 'assemblyai'
-                    }
-                elif result['status'] == 'error':
-                    return None, f"AssemblyAI transcription failed: {result['error']}"
-                
-                time.sleep(5)
+            # Extract results
+            transcript_text = transcript.text if transcript.text else ""
             
-            return None, "AssemblyAI transcription timeout"
+            # Generate summary using our own function since AssemblyAI doesn't provide it
+            summary_text = advanced_summarize(transcript_text) if transcript_text else ""
             
+            # Extract highlights if available
+            highlights = []
+            if hasattr(transcript, 'auto_highlights_result') and transcript.auto_highlights_result:
+                try:
+                    highlights = transcript.auto_highlights_result.results
+                except:
+                    highlights = []
+            
+            return {
+                'success': True,
+                'transcript': transcript_text,
+                'summary': summary_text,
+                'highlights': highlights,
+                'type': 'assemblyai'
+            }
+            
+        except ImportError:
+            return None, "AssemblyAI package not installed. Please run: pip install assemblyai"
         except Exception as e:
             return None, f"AssemblyAI error: {str(e)}"
     
@@ -180,17 +168,62 @@ class VideoProcessor:
                 if 'youtube.com' in video_url or 'youtu.be' in video_url:
                     # Try YouTube transcript first (free and fast)
                     result = self.get_youtube_transcript(video_url)
-                    if result and result[0] is None:
+                    if result and isinstance(result, dict) and result.get('success'):
+                        return result
+                    elif result and len(result) == 2 and result[0] is None:
                         # If transcript fails, try AssemblyAI
                         result = self.transcribe_with_assemblyai(video_url)
-                    return result
+                        return result
+                    else:
+                        return result  # Return the original result
                 else:
                     # For other video URLs, use AssemblyAI
                     return self.transcribe_with_assemblyai(video_url)
             
             elif input_type == 'file':
-                # Handle file upload (would need additional implementation)
-                return None, "File upload processing not implemented yet"
+                # Handle file upload using AssemblyAI
+                try:
+                    import assemblyai as aai
+                    
+                    # Set API key
+                    aai.settings.api_key = self.assemblyai_key
+                    
+                    # Configure transcription
+                    config = aai.TranscriptionConfig(
+                        speech_model=aai.SpeechModel.best,
+                        auto_highlights=True
+                    )
+                    
+                    # Transcribe the uploaded file
+                    transcript = aai.Transcriber(config=config).transcribe(video_input)
+                    
+                    if transcript.status == "error":
+                        return None, f"AssemblyAI transcription failed: {transcript.error}"
+                    
+                    # Extract results
+                    transcript_text = transcript.text if transcript.text else ""
+                    summary_text = advanced_summarize(transcript_text) if transcript_text else ""
+                    
+                    # Extract highlights if available
+                    highlights = []
+                    if hasattr(transcript, 'auto_highlights_result') and transcript.auto_highlights_result:
+                        try:
+                            highlights = transcript.auto_highlights_result.results
+                        except:
+                            highlights = []
+                    
+                    return {
+                        'success': True,
+                        'transcript': transcript_text,
+                        'summary': summary_text,
+                        'highlights': highlights,
+                        'type': 'assemblyai_file'
+                    }
+                    
+                except ImportError:
+                    return None, "AssemblyAI package not installed. Please run: pip install assemblyai"
+                except Exception as e:
+                    return None, f"File processing error: {str(e)}"
             
             else:
                 return None, "Unsupported input type"

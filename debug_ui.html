@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .upload-area {
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: #007bff;
+            background: #f8f9fa;
+        }
+        .upload-area.dragover {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>UI Debug Test - Upload Functionality</h1>
+    
+    <div class="debug-section">
+        <h2>Document Upload Test</h2>
+        <div class="upload-area" id="documentUploadArea">
+            <h3>📄 Drop your documents here</h3>
+            <p>Supports PDF, Images, Text files (up to 16MB)</p>
+            <p><strong>Click here or drag & drop files</strong></p>
+        </div>
+        <input type="file" id="documentFileInput" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.webp,.txt" style="display: none;">
+        
+        <div id="documentFileInfo" class="file-info">
+            <div id="documentFileName"></div>
+            <div id="documentFileSize"></div>
+        </div>
+        
+        <button id="documentProcessBtn" disabled>Process Document</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Video Upload Test</h2>
+        <div class="upload-area" id="videoUploadArea">
+            <h3>🎥 Drop video files here</h3>
+            <p>Supports MP4, AVI, MOV, MP3, WAV (up to 16MB)</p>
+            <p><strong>Click here or drag & drop files</strong></p>
+        </div>
+        <input type="file" id="videoFileInput" accept=".mp4,.avi,.mov,.mp3,.wav" style="display: none;">
+        
+        <div id="videoFileInfo" class="file-info">
+            <div id="videoFileName"></div>
+            <div id="videoFileSize"></div>
+        </div>
+        
+        <button id="videoProcessBtn" disabled>Process Video</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Status & Logs</h2>
+        <div id="statusMessage"></div>
+        <div class="log" id="debugLog"></div>
+        <button onclick="clearLog()">Clear Log</button>
+        <button onclick="testElements()">Test Element References</button>
+    </div>
+
+    <script>
+        // Debug logging function
+        function log(message) {
+            const logDiv = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('debugLog').innerHTML = '';
+        }
+        
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            log(`Status: ${message}`);
+        }
+        
+        // Test element references
+        function testElements() {
+            log('Testing element references...');
+            
+            const elements = [
+                'documentUploadArea', 'documentFileInput', 'documentFileInfo',
+                'documentFileName', 'documentFileSize', 'documentProcessBtn',
+                'videoUploadArea', 'videoFileInput', 'videoFileInfo',
+                'videoFileName', 'videoFileSize', 'videoProcessBtn'
+            ];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    log(`✓ ${id}: Found`);
+                } else {
+                    log(`✗ ${id}: NOT FOUND`);
+                }
+            });
+        }
+        
+        // Variables
+        let selectedDocumentFile = null;
+        let selectedVideoFile = null;
+        
+        // DOM Elements
+        const documentUploadArea = document.getElementById('documentUploadArea');
+        const documentFileInput = document.getElementById('documentFileInput');
+        const documentFileInfo = document.getElementById('documentFileInfo');
+        const documentFileName = document.getElementById('documentFileName');
+        const documentFileSize = document.getElementById('documentFileSize');
+        const documentProcessBtn = document.getElementById('documentProcessBtn');
+        
+        const videoUploadArea = document.getElementById('videoUploadArea');
+        const videoFileInput = document.getElementById('videoFileInput');
+        const videoFileInfo = document.getElementById('videoFileInfo');
+        const videoFileName = document.getElementById('videoFileName');
+        const videoFileSize = document.getElementById('videoFileSize');
+        const videoProcessBtn = document.getElementById('videoProcessBtn');
+        
+        // Event Listeners
+        log('Setting up event listeners...');
+        
+        // Document upload events
+        documentUploadArea.addEventListener('click', () => {
+            log('Document upload area clicked');
+            documentFileInput.click();
+        });
+        
+        documentUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            log('Document drag over');
+            documentUploadArea.classList.add('dragover');
+        });
+        
+        documentUploadArea.addEventListener('dragleave', () => {
+            log('Document drag leave');
+            documentUploadArea.classList.remove('dragover');
+        });
+        
+        documentUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            log('Document dropped');
+            documentUploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleDocumentFileSelect(files[0]);
+            }
+        });
+        
+        documentFileInput.addEventListener('change', (e) => {
+            log('Document file input changed');
+            handleDocumentFileSelect(e.target.files[0]);
+        });
+        
+        // Video upload events
+        videoUploadArea.addEventListener('click', () => {
+            log('Video upload area clicked');
+            videoFileInput.click();
+        });
+        
+        videoUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            log('Video drag over');
+            videoUploadArea.classList.add('dragover');
+        });
+        
+        videoUploadArea.addEventListener('dragleave', () => {
+            log('Video drag leave');
+            videoUploadArea.classList.remove('dragover');
+        });
+        
+        videoUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            log('Video dropped');
+            videoUploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleVideoFileSelect(files[0]);
+            }
+        });
+        
+        videoFileInput.addEventListener('change', (e) => {
+            log('Video file input changed');
+            handleVideoFileSelect(e.target.files[0]);
+        });
+        
+        // Button event listeners
+        documentProcessBtn.addEventListener('click', () => {
+            log('Document process button clicked');
+            showStatus('Document processing would start here...', 'info');
+        });
+        
+        videoProcessBtn.addEventListener('click', () => {
+            log('Video process button clicked');
+            showStatus('Video processing would start here...', 'info');
+        });
+        
+        // File handling functions
+        function handleDocumentFileSelect(file) {
+            log(`Document file selected: ${file ? file.name : 'none'}`);
+            
+            if (!file) return;
+            
+            const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp', 'text/plain'];
+            
+            if (!validTypes.includes(file.type)) {
+                showStatus('Please select a PDF, image, or text file', 'error');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                showStatus('File size must be less than 16MB', 'error');
+                return;
+            }
+            
+            selectedDocumentFile = file;
+            documentFileName.textContent = `File: ${file.name}`;
+            documentFileSize.textContent = `Size: ${formatFileSize(file.size)}`;
+            documentFileInfo.style.display = 'block';
+            documentProcessBtn.disabled = false;
+            showStatus('✅ Document file ready for processing', 'success');
+        }
+        
+        function handleVideoFileSelect(file) {
+            log(`Video file selected: ${file ? file.name : 'none'}`);
+            
+            if (!file) return;
+            
+            const allowedExtensions = ['.mp4', '.avi', '.mov', '.mp3', '.wav', '.m4a', '.wma'];
+            const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedExtensions.includes(fileExt)) {
+                showStatus('Unsupported video file type. Please select a MP4, AVI, MOV, MP3, WAV, M4A, or WMA file.', 'error');
+                return;
+            }
+            
+            if (file.size > 16 * 1024 * 1024) {
+                showStatus('Video file size must be less than 16MB', 'error');
+                return;
+            }
+            
+            selectedVideoFile = file;
+            videoFileName.textContent = `File: ${file.name}`;
+            videoFileSize.textContent = `Size: ${formatFileSize(file.size)}`;
+            videoFileInfo.style.display = 'block';
+            videoProcessBtn.disabled = false;
+            showStatus('✅ Video file ready for processing', 'success');
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Initialize
+        log('UI Debug Test initialized');
+        showStatus('🚀 Debug UI is ready! Test the upload functionality.', 'info');
+        testElements();
+    </script>
+</body>
+</html>

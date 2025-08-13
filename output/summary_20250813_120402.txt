@@ -1,0 +1,12 @@
+SummaBrowser AI - Document Summary Report
+Generated: 2025-08-13 12:04:02 UTC
+File: Screenshot_2025-06-25_122503.png
+Type: .PNG
+Size: 50833 bytes
+============================================================
+
+ộ Update the project-level setting below to continue Project public-facing name © project-426174063640 Project support email ® alokkumartiwari429@gmail.com Whitelist client IDs from external projects (optional) ® Add Web SDK configuration ® Web client ID 426174063640-73v9kruvn2oqbfmqh78di37o0m64q62r.apps.googleuser Web client secret *********************
+
+============================================================
+Processed by SummaBrowser AI Engine v2.1.0
+Visit: https://github.com/eepanshu/Summa_Browser

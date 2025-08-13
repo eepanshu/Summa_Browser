@@ -289,42 +289,55 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
+
   <main class="content">
     <section id="home">
       <h1>Welcome to SummaBrowse</h1>
-      <p>Your one-stop solution for summarizing PDFs and images. Upload your files and get concise summaries in seconds!</p>
+      <p>Your one-stop solution for summarizing PDFs, images, and videos. Upload your files or paste a video link to get concise AI-powered summaries in seconds!</p>
     </section>
     <div class="upload-section">
-        <input type="file" id="fileInput" accept="image/*,application/pdf">
-        <label for="fileInput">
-            <i class="fas fa-cloud-upload-alt"></i>
-            <p>Click to upload an image or PDF, or drag and drop</p>
-            <p style="font-size: 0.8rem; color: #666;">Supported formats: PNG, JPG, JPEG, PDF</p>
-        </label>
+      <input type="file" id="fileInput" accept="image/*,application/pdf">
+      <label for="fileInput">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Click to upload an image or PDF, or drag and drop</p>
+        <p style="font-size: 0.8rem; color: #666;">Supported formats: PNG, JPG, JPEG, PDF</p>
+      </label>
     </div>
-
-    <div class="error" id="error"></div>
-
-    <div class="loading">
+    <div class="video-section" style="margin:2rem 0; text-align:center;">
+      <h2>Video Summary</h2>
+      <input type="text" id="videoUrlInput" placeholder="Paste YouTube or video URL here" style="width:60%;padding:10px;border-radius:6px;border:1px solid #ccc;">
+      <button id="videoSummaryBtn" style="margin-left:10px;padding:10px 20px;border-radius:6px;background:#007bff;color:#fff;border:none;cursor:pointer;font-weight:600;">Generate Video Summary</button>
+      <div class="error" id="videoError" style="display:none;"></div>
+      <div class="loading" id="videoLoading" style="display:none;">
         <div class="loading-spinner"></div>
-        <p>Processing your file...</p>
+        <p>Processing your video...</p>
+      </div>
+      <div class="results" id="videoResults" style="display:none;">
+        <div class="result-section">
+          <h2>Video Summary</h2>
+          <p id="videoSummary"></p>
+        </div>
+      </div>
     </div>
-
+    <div class="error" id="error"></div>
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <p>Processing your file...</p>
+    </div>
     <div class="results" id="results">
-        <div class="result-section">
-            <h2>Extracted Text</h2>
-            <p id="extractedText"></p>
-        </div>
-        <div class="result-section">
-            <h2>Summary</h2>
-            <p id="summary"></p>
-        </div>
-        <div class="result-section">
-            <a id="downloadLink" href="#" download="summary.txt" style="display: none;">Download Summary</a>
-        </div>
+      <div class="result-section">
+        <h2>Extracted Text</h2>
+        <p id="extractedText"></p>
+      </div>
+      <div class="result-section">
+        <h2>Summary</h2>
+        <p id="summary"></p>
+      </div>
+      <div class="result-section">
+        <a id="downloadLink" href="#" download="summary.txt" style="display: none;">Download Summary</a>
+      </div>
     </div>
-</div>
+  </main>
 
 
     <section id="upload">
@@ -449,6 +462,49 @@
         error.textContent = message;
         error.style.display = 'block';
     }
+
+  // Video summary logic
+  const videoUrlInput = document.getElementById('videoUrlInput');
+  const videoSummaryBtn = document.getElementById('videoSummaryBtn');
+  const videoError = document.getElementById('videoError');
+  const videoLoading = document.getElementById('videoLoading');
+  const videoResults = document.getElementById('videoResults');
+  const videoSummary = document.getElementById('videoSummary');
+
+  videoSummaryBtn.addEventListener('click', function() {
+    const url = videoUrlInput.value.trim();
+    videoError.style.display = 'none';
+    videoResults.style.display = 'none';
+    if (!url) {
+      videoError.textContent = 'Please enter a video URL.';
+      videoError.style.display = 'block';
+      return;
+    }
+    videoLoading.style.display = 'block';
+    const formData = new FormData();
+    formData.append('video_url', url);
+    fetch('/process-video', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        videoSummary.textContent = data.summary;
+        videoResults.style.display = 'block';
+      } else {
+        videoError.textContent = data.error || 'Error processing video.';
+        videoError.style.display = 'block';
+      }
+    })
+    .catch(err => {
+      videoError.textContent = err.message || 'Error connecting to server.';
+      videoError.style.display = 'block';
+    })
+    .finally(() => {
+      videoLoading.style.display = 'none';
+    });
+  });
 
   // Dark/Light Mode Toggle
   const themeToggle = document.getElementById("themeToggle");
