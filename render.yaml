@@ -3,8 +3,8 @@ services:
   - type: web
     name: summabrowser-api
     env: python
-    buildCommand: "pip install -r summary/requirements.txt"
-    startCommand: "python summary/app-web.py"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app-web.py"
     plan: free
     envVars:
       - key: FLASK_ENV
