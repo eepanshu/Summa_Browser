@@ -4,7 +4,7 @@ services:
     name: summabrowser-api
     env: python
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python app-web.py"
+  - startCommand: "gunicorn app-web:app --bind 0.0.0.0:$PORT"
     plan: free
     envVars:
       - key: FLASK_ENV
